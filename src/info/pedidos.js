@@ -1,37 +1,30 @@
-const { listadoPedidos, listadoUsuarios, historialPedidos } = require('./basedatos');
-
-class Pedido {
-    constructor(id, estado, hora, descripcion, metodoPago, montoPago, usuarioId, direccion) {
-        this.id = id;
-        this.estado = estado;
-        this.hora = hora;
-        this.descripcion = descripcion;
-        this.metodoPago = metodoPago;
-        this.montoPago = montoPago;
-        this.usuarioId = usuarioId;
-        this.direccion = direccion;
-    }
-}
+const { platos, listadoPedidos, listadoUsuarios, historialPedidos } = require('./basedatos');
 
 function crearPedido(req, res) {
-    let nuevoPedido = new Pedido();
-    if (listadoPedidos.length === 0) {
-        nuevoPedido.id = 1;
-    } else {
-        nuevoPedido.id = listadoPedidos[listadoPedidos.length - 1].id + 1 ;
-    }
-    nuevoPedido.estado = 1;
-    nuevoPedido.hora = new Date();
-    nuevoPedido.usuarioId = Number(req.headers.userid);
-    nuevoPedido.descripcion = [];
-    for (let usuario of listadoUsuarios) {
-        if (usuario.id === Number(req.headers.userid)) {
-            nuevoPedido.direccion = usuario.direccion;
-            listadoPedidos.push(nuevoPedido);
-            res.status(200).json(`El pedido ${nuevoPedido.id} ha sido creado. Ya puede agregar platos al pedido.`);
+    const platoId = Number(req.params.platoId);
+    const cantidad = req.body.cantidad;
+    const fecha = new Date();
+
+    for (let plato of platos) {
+       if (plato.id === platoId) {
+        const estado = "pendiente";
+        const id = listadoPedidos.length + 1;
+        const subtotal = plato.precio * cantidad;
+        const nuevoPedido = {...req.body, plato, subtotal, fecha, estado, id};
+        listadoPedidos.push (nuevoPedido);
+        res.status(200).json(listadoPedidos);
+
         }
-    }
-}
+    } res.status(406).json(`El producto no existe`);
+};
+
+
+
+
+
+
+
+
 
 function pagarPedido(req, res) {
     let monto = 0;
@@ -90,4 +83,4 @@ function eliminarPedido(req, res) {
     }
 }
 
-module.exports = { crearPedido, pagarPedido, modificarPedido, listarPedidos, eliminarPedido, Pedido, verHistorial }
+module.exports = { crearPedido, pagarPedido, modificarPedido, listarPedidos, eliminarPedido, verHistorial }

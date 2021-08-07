@@ -37,8 +37,17 @@ function validaRegistro(req, res, next) {
 
 
 function validaLogin(req, res, next) {
+    for (const usuario of listadoUsuarios) {
+        if (usuario.id === Number(req.headers.userid)) {
+            if (usuario.esAdmin === false) {
+                return next();
+            }
+        } 
+    }    
+    res.status(401).json("No es un usuario válido");
+};
 
-    loginUsu = String(req.body.username);
+ /*    loginUsu = String(req.body.username);
     loginContrasena = String(req.body.contrasena);
 
     for (const usuario of listadoUsuarios) {
@@ -46,7 +55,7 @@ function validaLogin(req, res, next) {
             return res.status(200).json("Ingreso correcto");
         }
     }res.json("Usuario y/o contraseña incorrecta");
-};
+}; */
 
 
 

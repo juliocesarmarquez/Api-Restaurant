@@ -53,7 +53,7 @@ function eliminarPlato(req, res) {
     } res.status(406).json(`El producto no existe`);
 };
 
-function agregarCarrito(req, res) {
+/* function agregarCarrito(req, res) {
     for (let usuario of listadoUsuarios) {
         if (usuario.id === Number(req.headers.userid)) {
             for (let pedido of listadoPedidos) {
@@ -89,6 +89,6 @@ function quitarCarrito(req, res) {
             res.status(401).json(`El pedido ${req.params.idPedido} no corresponde al usuario ${req.headers.userid}`);
         }
     }
-}
+} */
 
-module.exports = { Plato, listarPlatos, crearPlato, modificarPlato, eliminarPlato, agregarCarrito, quitarCarrito }
+module.exports = { Plato, listarPlatos, crearPlato, modificarPlato, eliminarPlato }

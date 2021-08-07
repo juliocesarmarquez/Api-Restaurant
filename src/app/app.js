@@ -28,12 +28,11 @@ app.use(express.json());
 
 const { verUsuarios, eliminarUsuario/* , modificarUsuario */ } = require('../info/usuarios');
 const { registraUsuario, loginUsuario } = require('../info/validacion');
-const { validAdmin, validaRegistro, validaLogin, midLogin/* , midId */ } =  require('../middlewares/validaciones');
+const { validAdmin, validaRegistro, validaLogin } =  require('../middlewares/validaciones');
 const { midModificarPedido, midIdPedido } = require('../middlewares/pedidos');
-/* /* const { /* /* midCrearPlato, */ /* midIdPlato  } = require('../middlewares/platos'); */
 const { midMetodoPago, midCrearPago, midIdPago } = require('../middlewares/formapago');
 const { crearPedido, pagarPedido, modificarPedido, eliminarPedido, listarPedidos, verHistorial } = require('../info/pedidos');
-const { agregarCarrito, quitarCarrito, crearPlato, listarPlatos, modificarPlato, eliminarPlato } = require('../info/platos');
+const { crearPlato, listarPlatos, modificarPlato, eliminarPlato } = require('../info/platos');
 const { crearPago, eliminarFormaPago, modificaFormaPago, verFormaPago } = require('../info/formapago');
 
 
@@ -195,19 +194,20 @@ app.put("/productos/:platoId", validAdmin, modificarPlato);
 
 
 
-app.delete("/productos/:platoId", validAdmin, /* midIdPlato, */ eliminarPlato);
+app.delete("/productos/:platoId", validAdmin, eliminarPlato);
 
-app.post("/productos/:idPedido/:idProducto",midIdPedido, /* midIdPlato, */ agregarCarrito);
-
-app.delete("/productos/:idPedido/:idProducto", midIdPedido, /* midIdPlato, */ quitarCarrito);
 
 //////////////////////pedidos
 
+app.post("/pedidos/:platoId", validaLogin, crearPedido); 
+
 app.get("/pedidos", validAdmin, listarPedidos);
 
-app.post("/pedidos", validaLogin, crearPedido); 
+
+
 
 app.get("/pedidos/historial", verHistorial);
+
 
 app.post("/pedidos/:idPedido", midMetodoPago, pagarPedido); 
 
@@ -215,15 +215,20 @@ app.put("/pedidos/:idPedido", validAdmin, midIdPedido, midModificarPedido, modif
 
 app.delete("/pedidos/:idPedido", validAdmin, midIdPedido, eliminarPedido); 
 
+app.post("/productos/:idPedido/:idProducto",midIdPedido );
+
+app.delete("/productos/:idPedido/:idProducto", midIdPedido);
+
 //////////////////////forma de pago
 
 app.get("/mediosdepago", validAdmin, verFormaPago);
 
-app.post("/mediosdepago", validAdmin, midCrearPago, crearPago); 
+app.post("/mediosdepago", validAdmin, crearPago); 
 
-app.delete("/mediosdepago/:idMedioPago", validAdmin, midIdPago, eliminarFormaPago); 
+app.delete("/mediosdepago/:idFormaPago", validAdmin, eliminarFormaPago); 
 
-app.put("/mediosdepago/:idMedioPago", validAdmin, midIdPago, midCrearPago, modificaFormaPago);
+
+app.put("/mediosdepago/:idFormaPago", validAdmin, modificaFormaPago);
 
 
 
