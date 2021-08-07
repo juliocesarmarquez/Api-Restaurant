@@ -15,6 +15,28 @@ const swaggerOptions = {
         }
     },
     apis: ['./src/app/app.js'],
+    tags: [
+        {
+            name: 'auth',
+            description: 'Operaciones sobre autorización'
+        },
+        {
+            name: 'usuarios',
+            description: 'Operaciones sobre usuarios'
+        },
+        {
+            name: 'pedidos',
+            description: 'Operaciones sobre pedidos'
+        },
+        {
+            name: 'productos',
+            description: 'Operaciones sobre productos'
+        },
+        {
+            name: 'formas de pago',
+            description: 'Operaciones sobre formas de pago'
+        },
+    ]
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
@@ -44,32 +66,55 @@ const { crearPago, eliminarFormaPago, modificaFormaPago, verFormaPago } = requir
  * @swagger
  * /registro:
  *  post:
- *    summary: Registrar un usuario 
- *    description: Crea un usuario en la aplicacion
- *    requestBody:
- *      required: true
- *      content: 
- *        application/json:
- *          schema:
- *            type: object
- *            properties:
- *              noUsuario:
- *                type: string
- *              noApellido:
- *                type: string
- *              mail:
- *                type: string
- *              telefono:
- *                type: string
- *              direccion:
- *                type: string
- *              contrasena:
- *                type: string
+ *    tags: [auth]
+ *    summary: usuarios.
+ *    description : Listado de usuarios.
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - in: body
+ *        name: usuario
+ *        description: usuario  a crear
+ *        schema:
+ *          type: object
+ *          required:
+ *            - noUsuario
+ *            - noApellido
+ *            - mail
+ *            - telefono
+ *            - direccion
+ *            - contrasena
+ *          properties:
+ *            noUsuario:
+ *              description: Nombre del usuario
+ *              type: string
+ *              example: manuginobili
+ *            noApellido:
+ *              description: Nombre y Apellido del usuario
+ *              type: string
+ *              example: Manuel Ginobili
+ *            mail:
+ *              description: Correo electrónico del usuario 
+ *              type: email
+ *              example: manu@ginobili.com
+ *            telefono:
+ *              description: Telefono del usuario 
+ *              type: string
+ *              example: 2901543514
+ *            direccion:
+ *              description: Dirección de envio 
+ *              type: email
+ *              example: Ushuaia, de los Ñires #3515
+ *            contrasena:
+ *              description: Contraseña del usuario
+ *              type: password
+ *              example: La Plata, Calle 7 # 1234
  *    responses:
- *       '200':
- *        description: OK
- *       '405':
- *        description: Invalido
+ *      200:
+ *       description: Usuario registrado
+ *      401:
+ *       description: Usuario no registrado
+ *      
  */
 app.post('/registro', validaRegistro, registraUsuario);
 
@@ -77,24 +122,33 @@ app.post('/registro', validaRegistro, registraUsuario);
  * @swagger
  * /login:
  *  post:
- *    summary: Login usuario 
- *    description: Inicio de sesión usuarios.
- *    requestBody:
- *      required: true
- *      content: 
- *        application/json:
- *          schema:
- *            type: object
- *            properties:
- *              username:
- *                type: string
- *              contrasena:
- *                type: string
+ *    tags: [auth]
+ *    summary: Login de usuario.
+ *    description : Login de usuario.
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - in: body
+ *        name: datos
+ *        description: Nombre y contraseña de usuario a loguearse
+ *        schema:
+ *          type: object
+ *          required:
+ *            - username
+ *          properties:
+ *            username:
+ *              description: Nombre de usuario a loguearse.
+ *              type: string
+ *              example: admin
+ *            contrasena:
+ *              description: Contraseña de usuario a loguearse 
+ *              type: string
+ *              example: acamica
  *    responses:
- *       '200':
- *        description: OK
- *       '405':
- *        description: Invalido
+ *      200:
+ *       description: Login de usuario satisfactorio. 
+ *      401:
+ *       description: Usuario no encontrado (email y/o contraseña incorrecta)
  */
 
 app.post('/login', validaLogin, loginUsuario);
