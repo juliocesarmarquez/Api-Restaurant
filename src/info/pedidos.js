@@ -1,4 +1,4 @@
-const { platos, listadoPedidos, listadoUsuarios, historialPedidos } = require('./basedatos');
+const { platos, listadoPedidos, pedidosConfirmados, listadoUsuarios, historialPedidos, Pedconfirmados, formaPago, estadoPedidos } = require('./basedatos');
 
 function crearPedido(req, res) {
     const platoId = Number(req.params.platoId);
@@ -6,49 +6,42 @@ function crearPedido(req, res) {
     const fecha = new Date();
 
     for (let plato of platos) {
-       if (plato.id === platoId) {
-        const estado = "pendiente";
-        const id = listadoPedidos.length + 1;
-        const subtotal = plato.precio * cantidad;
-        const nuevoPedido = {...req.body, plato, subtotal, fecha, estado, id};
-        listadoPedidos.push (nuevoPedido);
-        res.status(200).json(listadoPedidos);
+        if (plato.id === platoId) {
+            const estado = "pendiente";
+            const id = listadoPedidos.length + 1;
+            const subtotal = plato.precio * cantidad;
+            const nuevoPedido = { ...req.body, plato, subtotal, fecha, estado, id };
+            listadoPedidos.push(nuevoPedido);
+            res.status(200).json(listadoPedidos);
 
         }
     } res.status(406).json(`El producto no existe`);
 };
 
+function confirmarPedido(req, res) {
+    const fecha = new Date;
+    const idFormaPago = Number(req.params.idFormaPago);
+    const { direccion } = req.body;
+    var imptotal = 0;
+    for (nuevoPed of listadoPedidos) {
+        imptotal = (imptotal + nuevoPed.subtotal);
+    };
 
+    for (const pago of formaPago) {
+        if (idFormaPago === pago.id) {
 
+            const id = pedidosConfirmados.length + 1;
+            const estado = estadoPedidos[1];
+            pedidosConfirmados.push(new Pedconfirmados(id, fecha, estado, pago, imptotal, direccion, listadoPedidos));
+            res.send(pedidosConfirmados);
 
-
-
-
-
-
-function pagarPedido(req, res) {
-    let monto = 0;
-    for (let usuario of listadoUsuarios) {
-        if (usuario.id === Number(req.headers.userid)) {
-            for (let pedido of listadoPedidos) {
-                if (pedido.id === Number(req.params.idPedido)) {
-                    pedido.metodoPago = req.body.metodoPago;
-                    for (let plato of pedido.descripcion) {
-                        monto += plato.precio;
-                    }
-                    pedido.montoPago = monto;
-                    pedido.estado = 2;
-                    res.status(200).json(`El pedido ${pedido.id} ha sido pagado`);
-                }
-            }
         }
     }
-}
+};
 
 function listarPedidos(req, res) {
     res.status(200).json(listadoPedidos);
 }
-
 function verHistorial(req, res) {
     let historialUsuario = [];
     for (let pedidoEntregado of historialPedidos) {
@@ -83,4 +76,4 @@ function eliminarPedido(req, res) {
     }
 }
 
-module.exports = { crearPedido, pagarPedido, modificarPedido, listarPedidos, eliminarPedido, verHistorial }
+module.exports = { crearPedido, confirmarPedido, modificarPedido, listarPedidos, eliminarPedido, verHistorial }

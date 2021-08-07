@@ -53,7 +53,7 @@ const { registraUsuario, loginUsuario } = require('../info/validacion');
 const { validAdmin, validaRegistro, validaLogin } =  require('../middlewares/validaciones');
 const { midModificarPedido, midIdPedido } = require('../middlewares/pedidos');
 const { midMetodoPago, midCrearPago, midIdPago } = require('../middlewares/formapago');
-const { crearPedido, pagarPedido, modificarPedido, eliminarPedido, listarPedidos, verHistorial } = require('../info/pedidos');
+const { crearPedido, confirmarPedido, modificarPedido, eliminarPedido, listarPedidos, verHistorial } = require('../info/pedidos');
 const { crearPlato, listarPlatos, modificarPlato, eliminarPlato } = require('../info/platos');
 const { crearPago, eliminarFormaPago, modificaFormaPago, verFormaPago } = require('../info/formapago');
 
@@ -154,7 +154,7 @@ app.post('/registro', validaRegistro, registraUsuario);
 app.post('/login', validaLogin, loginUsuario);
 
 
-/* app.use('/', midLogin); */
+
 
 //////////////////////usuarios
 
@@ -257,13 +257,18 @@ app.post("/pedidos/:platoId", validaLogin, crearPedido);
 
 app.get("/pedidos", validAdmin, listarPedidos);
 
+app.post("/pedidos/confirma/:idFormaPago", confirmarPedido);
+
+
 
 
 
 app.get("/pedidos/historial", verHistorial);
 
 
-app.post("/pedidos/:idPedido", midMetodoPago, pagarPedido); 
+ 
+
+
 
 app.put("/pedidos/:idPedido", validAdmin, midIdPedido, midModificarPedido, modificarPedido); 
 

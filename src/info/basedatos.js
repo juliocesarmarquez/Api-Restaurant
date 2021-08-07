@@ -49,6 +49,17 @@ let estadoPedidos = [
 ];
 
 let listadoPedidos = [];
+let pedidosConfirmados = [];
 let historialPedidos = [];
 
-module.exports = { listadoUsuarios, platos, formaPago, estadoPedidos, listadoPedidos, historialPedidos }
+function Pedconfirmados (id, fecha, estado, pago, total, direccion, nuevosPedidos) {
+    this.id = id;
+    this.fecha = fecha;
+    this.estado = estado;
+    this.pago = pago;
+    this.total = total;
+    this.direccion = direccion;
+    this.nuevosPedidos = nuevosPedidos;
+}
+
+module.exports = { listadoUsuarios, platos, formaPago, estadoPedidos, listadoPedidos, pedidosConfirmados, historialPedidos, Pedconfirmados }
