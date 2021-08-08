@@ -43,32 +43,30 @@ function listarPedidos(req, res) {
     res.status(200).json(listadoPedidos);
 }
 function verHistorial(req, res) {
-    let historialUsuario = [];
-    for (let pedidoEntregado of historialPedidos) {
-        if (pedidoEntregado.usuarioId === Number(req.headers.userid)) {
-            historialUsuario.push(pedidoEntregado);
-        }
-    }
-    res.status(200).json(historialUsuario);
+    res.status(200).json(pedidosConfirmados);
 }
 
 function modificarPedido(req, res) {
-    for (let pedido of listadoPedidos) {
-        if (pedido.id === Number(req.params.idPedido)) {
-            pedido.estado = req.body.estado;
-            if (pedido.estado === 5) {
-                historialPedidos.push(pedido);
-                let pedidoIndex = listadoPedidos.indexOf(pedido);
-                listadoPedidos.splice(pedidoIndex, 1);
-            }
-            res.status(200).json(`El estado del pedido ${pedido.id} ha sido modificado a ${pedido.estado}`);
+    const pedidoId = Number(req.params.pedidoId)
+    for (const pedido of pedidosConfirmados) {
+        if (pedidoId === pedido.id) {
+
+            const position = pedidosConfirmados.indexOf(pedido);
+            pedidosConfirmados[position].estado = req.body.estado;
+            res.status(200).send('El estado del pedido se ha modificado exitosamente.');
+
         }
-    }
-}
+    } res.status(406).send('El pedido no existe.');
+};
+
+
+
+
+
 
 function eliminarPedido(req, res) {
     for (let pedido of listadoPedidos) {
-        if (pedido.id === Number(req.params.idPedido)) {
+        if (pedido.id === Number(req.params.pedidoId)) {
             let pedidoIndex = listadoPedidos.indexOf(pedido);
             listadoPedidos.splice(pedidoIndex, 1);
             res.status(200).json(`El pedido ${pedido.id} ha sido eliminado.`);

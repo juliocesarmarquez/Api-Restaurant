@@ -259,18 +259,13 @@ app.get("/pedidos", validAdmin, listarPedidos);
 
 app.post("/pedidos/confirma/:idFormaPago", confirmarPedido);
 
-
-
-
-
 app.get("/pedidos/historial", verHistorial);
 
-
- 
-
+app.put("/pedidos/modifica/:pedidoId", validAdmin,modificarPedido); 
 
 
-app.put("/pedidos/:idPedido", validAdmin, midIdPedido, midModificarPedido, modificarPedido); 
+
+
 
 app.delete("/pedidos/:idPedido", validAdmin, midIdPedido, eliminarPedido); 
 

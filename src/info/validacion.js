@@ -11,6 +11,7 @@ class Usuario {
         this.contrasena = contrasena;
         this.login = login;
         this.esAdmin = esAdmin;
+        
     }
 }
 
@@ -19,7 +20,7 @@ function loginUsuario(req, res) {
         if (usuario.noUsuario === req.body.username && usuario.contrasena === req.body.contrasena) {
             usuario.login = true;
             return res.status(200).json(`${usuario.id}`);
-            
+
         }
     }
     res.status(401).json(`Usuario no valido`);
@@ -27,11 +28,13 @@ function loginUsuario(req, res) {
 
 function registraUsuario(req, res) {
     let nuevoUsuario = new Usuario();
+     
     if (listadoUsuarios.length === 0) {
         nuevoUsuario.id = 1;
     } else {
-        nuevoUsuario.id = listadoUsuarios[listadoUsuarios.length - 1].id +1 ;
+        nuevoUsuario.id = listadoUsuarios[listadoUsuarios.length - 1].id + 1;
     }
+
     nuevoUsuario.noUsuario = req.body.noUsuario;
     nuevoUsuario.noApellido = req.body.noApellido;
     nuevoUsuario.mail = req.body.mail;
@@ -40,6 +43,8 @@ function registraUsuario(req, res) {
     nuevoUsuario.contrasena = req.body.contrasena;
     nuevoUsuario.login = false;
     nuevoUsuario.esAdmin = false;
+  
+
     listadoUsuarios.push(nuevoUsuario);
     res.status(200).json(`El usuario ${nuevoUsuario.noUsuario} fue creado con éxito.`);
 }

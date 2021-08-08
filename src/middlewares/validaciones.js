@@ -6,19 +6,20 @@ function validAdmin(req, res, next) {
             if (usuario.esAdmin === true) {
                 return next();
             }
-        } 
-    }    
+        }
+    }
     res.status(401).json("No es administrador");
 }
 
 
 function validaRegistro(req, res, next) {
-    for (let usuario of listadoUsuarios) {
-        if (usuario.mail === req.body.mail) {
+    for (let nuevoUsuario of listadoUsuarios) {
+    if (nuevoUsuario.mail === req.body.mail) {
             res.status(406).json("Email ya existente");
+            return;
         }
     }
-    if (req.body.noUsuario === null || req.body.noUsuario === undefined) {  
+    if (req.body.noUsuario === null || req.body.noUsuario === undefined) {
         res.status(406).json("Nombre de usuario inválido");
     } else if (req.body.noApellido === null || req.body.noApellido === undefined) {
         res.status(406).json("Nombre y apellido inválidos");
@@ -26,9 +27,9 @@ function validaRegistro(req, res, next) {
         res.status(406).json("Email inválido");
     } else if (req.body.telefono === null || req.body.telefono === undefined) {
         res.status(406).json("Teléfono inválido");
-    } else if (req.body.direccion === null || req.body.direccion  === undefined) {
+    } else if (req.body.direccion === null || req.body.direccion === undefined) {
         res.status(406).json("Direción inválida");
-    } else if (req.body.contrasena === null || req.body.contrasena  === undefined) {
+    } else if (req.body.contrasena === null || req.body.contrasena === undefined) {
         res.status(406).json("Contraseña inválida");
     } else {
         return next();
@@ -42,20 +43,12 @@ function validaLogin(req, res, next) {
             if (usuario.esAdmin === false) {
                 return next();
             }
-        } 
-    }    
+        }
+    }
     res.status(401).json("No es un usuario válido");
 };
 
- /*    loginUsu = String(req.body.username);
-    loginContrasena = String(req.body.contrasena);
 
-    for (const usuario of listadoUsuarios) {
-        if (usuario.noUsuario === loginUsu && usuario.contrasena === loginContrasena) {
-            return res.status(200).json("Ingreso correcto");
-        }
-    }res.json("Usuario y/o contraseña incorrecta");
-}; */
 
 
 
@@ -74,4 +67,4 @@ function midLogin(req, res, next) {
 
 /* function midId */
 
-module.exports = { validAdmin, validaRegistro, validaLogin, midLogin/* , midId  */}
+module.exports = { validAdmin, validaRegistro, validaLogin, midLogin/* , midId  */ }
