@@ -48,11 +48,9 @@ app.use(express.json());
 
 /////////////////////importar archivos particulares//
 
-const { verUsuarios, eliminarUsuario/* , modificarUsuario */ } = require('../info/usuarios');
+const { verUsuarios } = require('../info/usuarios');
 const { registraUsuario, loginUsuario } = require('../info/validacion');
 const { validAdmin, validaRegistro, validaLogin } =  require('../middlewares/validaciones');
-const { midModificarPedido, midIdPedido } = require('../middlewares/pedidos');
-const { midMetodoPago, midCrearPago, midIdPago } = require('../middlewares/formapago');
 const { crearPedido, confirmarPedido, modificarPedido, eliminarPedido, listarPedidos, verHistorial } = require('../info/pedidos');
 const { crearPlato, listarPlatos, modificarPlato, eliminarPlato } = require('../info/platos');
 const { crearPago, eliminarFormaPago, modificaFormaPago, verFormaPago } = require('../info/formapago');
@@ -108,7 +106,7 @@ const { crearPago, eliminarFormaPago, modificaFormaPago, verFormaPago } = requir
  *            contrasena:
  *              description: Contraseña del usuario
  *              type: password
- *              example: La Plata, Calle 7 # 1234
+ *              example: gospurs!
  *    responses:
  *      200:
  *       description: Usuario registrado
@@ -267,11 +265,11 @@ app.put("/pedidos/modifica/:pedidoId", validAdmin,modificarPedido);
 
 
 
-app.delete("/pedidos/:idPedido", validAdmin, midIdPedido, eliminarPedido); 
+app.delete("/pedidos/:idPedido", validAdmin, eliminarPedido); 
 
-app.post("/productos/:idPedido/:idProducto",midIdPedido );
+app.post("/productos/:idPedido/:idProducto", );
 
-app.delete("/productos/:idPedido/:idProducto", midIdPedido);
+app.delete("/productos/:idPedido/:idProducto", );
 
 //////////////////////forma de pago
 
