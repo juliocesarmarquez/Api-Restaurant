@@ -90,7 +90,7 @@ const { crearPago, eliminarFormaPago, modificaFormaPago, verFormaPago } = requir
  *            noApellido:
  *              description: Nombre y Apellido del usuario
  *              type: string
- *              example: Manuel Ginobili
+ *              example: Emanuel David Ginobili
  *            mail:
  *              description: Correo electrónico del usuario 
  *              type: email
@@ -106,12 +106,12 @@ const { crearPago, eliminarFormaPago, modificaFormaPago, verFormaPago } = requir
  *            contrasena:
  *              description: Contraseña del usuario
  *              type: password
- *              example: gospurs!
+ *              example: gospursgo!
  *    responses:
  *      200:
  *       description: Usuario registrado
- *      401:
- *       description: Usuario no registrado
+ *      406:
+ *       description: El email ya esta registrado
  *      
  */
 app.post('/registro', validaRegistro, registraUsuario);
@@ -137,11 +137,11 @@ app.post('/registro', validaRegistro, registraUsuario);
  *            username:
  *              description: Nombre de usuario a loguearse.
  *              type: string
- *              example: admin
+ *              example: manuginobili
  *            contrasena:
  *              description: Contraseña de usuario a loguearse 
  *              type: string
- *              example: acamica
+ *              example: gospursgo!
  *    responses:
  *      200:
  *       description: Login de usuario satisfactorio. 
@@ -149,7 +149,7 @@ app.post('/registro', validaRegistro, registraUsuario);
  *       description: Usuario no encontrado (email y/o contraseña incorrecta)
  */
 
-app.post('/login', validaLogin, loginUsuario);
+app.post('/login', loginUsuario );
 
 
 

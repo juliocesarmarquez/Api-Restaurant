@@ -15,22 +15,22 @@ function validAdmin(req, res, next) {
 function validaRegistro(req, res, next) {
     for (let nuevoUsuario of listadoUsuarios) {
     if (nuevoUsuario.mail === req.body.mail) {
-            res.status(406).json("Email ya existente");
+            res.status(406).json(`El email ya esta registrado`);
             return;
         }
     }
     if (req.body.noUsuario === null || req.body.noUsuario === undefined) {
-        res.status(406).json("Nombre de usuario inválido");
+        res.status(406).json(`Nombre de usuario inválido`);
     } else if (req.body.noApellido === null || req.body.noApellido === undefined) {
-        res.status(406).json("Nombre y apellido inválidos");
+        res.status(406).json(`Nombre y apellido inválidos`);
     } else if (req.body.mail === null || req.body.mail === undefined) {
-        res.status(406).json("Email inválido");
+        res.status(406).json(`Email inválido`);
     } else if (req.body.telefono === null || req.body.telefono === undefined) {
-        res.status(406).json("Teléfono inválido");
+        res.status(406).json(`Teléfono inválido`);
     } else if (req.body.direccion === null || req.body.direccion === undefined) {
-        res.status(406).json("Direción inválida");
+        res.status(406).json(`Direción inválida`);
     } else if (req.body.contrasena === null || req.body.contrasena === undefined) {
-        res.status(406).json("Contraseña inválida");
+        res.status(406).json(`Contraseña inválida`);
     } else {
         return next();
     }

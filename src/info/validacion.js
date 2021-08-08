@@ -23,7 +23,7 @@ function loginUsuario(req, res) {
 
         }
     }
-    res.status(401).json(`Usuario no valido`);
+    res.status(401).json(`Usuario no encontrado (email y/o contraseña incorrecta)`);
 }
 
 function registraUsuario(req, res) {
@@ -46,7 +46,7 @@ function registraUsuario(req, res) {
   
 
     listadoUsuarios.push(nuevoUsuario);
-    res.status(200).json(`El usuario ${nuevoUsuario.noUsuario} fue creado con éxito.`);
+    res.status(200).json(`El usuario ${nuevoUsuario.id} fue creado con éxito.`);
 }
 
 module.exports = { loginUsuario, registraUsuario }
