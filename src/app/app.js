@@ -321,42 +321,347 @@ app.post("/productos", validAdmin, crearPlato);  /// crear condicion error detal
 
 app.put("/productos/:platoId", validAdmin, modificarPlato); 
 
-
+/**
+ * @swagger
+ * /productos/{platoId}:
+ *  delete:
+ *    tags: [productos]
+ *    summary: Eliminar un plato.
+ *    description : Elimina un plato existente
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - in: header
+ *        name: userid 
+ *        required: true
+ *        description: Id del Usuario Administrador
+ *      - name: platoId
+ *        in: path 
+ *        required: true
+ *        type: integer      
+ *        description: Id del plato a eliminar
+ *    responses:
+ *      200:
+ *       description: OK
+ *      406:
+ *       description: Invalido
+ *      
+ */
 
 app.delete("/productos/:platoId", validAdmin, eliminarPlato);
 
 
 //////////////////////pedidos
 
-app.post("/pedidos/:platoId", validaLogin, crearPedido); 
+/**
+ * @swagger
+ * /pedidos/{platoId}:
+ *  post:
+ *    tags: [pedidos]
+ *    summary: Crea un pedido.
+ *    description : Usuario crea un pedido
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - in: header
+ *        name: userid 
+ *        required: true
+ *        description: Id del Usuario
+ *        example: 2
+ *      - name: platoId
+ *        in: path 
+ *        required: true
+ *        type: integer      
+ *        description: Id del plato elegido
+ *        example: 5
+ *      - in: body
+ *        name: Cantidad de platos
+ *        description: Elegir la cantidad de platos
+ *        schema:
+ *          type: object
+ *          required:
+ *            - cantidad
+ *          properties:
+ *            cantidad:
+ *              description: cantidad de platos
+ *              type: number
+ *              example: 3
+ *    responses:
+ *      200:
+ *       description: OK
+ *      401:
+ *       description: Invalido
+ *      
+ */
+
+app.post("/pedidos/:platoId", validaLogin, crearPedido);
+
+/**
+ * @swagger
+ * /pedidos:
+ *  get:
+ *    tags: [pedidos]
+ *    summary: Listado de pedidos.
+ *    description : Visualiza el listado de pedidos
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - in: header
+ *        name: userid 
+ *        required: true
+ *        description: Id del Usuario Administrador
+ *        example: 1
+ *    responses:
+ *      200:
+ *       description: OK
+ *      401:
+ *       description: Invalido
+ *      
+ */
 
 app.get("/pedidos", validAdmin, listarPedidos);
 
-app.post("/pedidos/confirma/:idFormaPago", confirmarPedido);
+/**
+ * @swagger
+ * /pedidos/confirma/{idFormaPago}:
+ *  post:
+ *    tags: [pedidos]
+ *    summary: Confirma pedido.
+ *    description : Usuario confirma un pedido
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - in: header
+ *        name: userid 
+ *        required: true
+ *        description: Id del Usuario
+ *        example: 2
+ *      - name: idFormaPago
+ *        in: path 
+ *        required: true
+ *        type: integer      
+ *        description: Id de forma de pago elegida
+ *        example: 3
+ *      - in: body
+ *        name: Direccion
+ *        description: Direccion de envío
+ *        schema:
+ *          type: object
+ *          required:
+ *            - direccion
+ *          properties:
+ *            direccion:
+ *              description: direccion de envío
+ *              type: string
+ *              example: Avenida Islas Malvinas
+ *    responses:
+ *      200:
+ *       description: OK
+ *      401:
+ *       description: Invalido
+ *      
+ */
 
-app.get("/pedidos/historial", verHistorial);
+app.post("/pedidos/confirma/:idFormaPago", validaLogin, confirmarPedido);
+
+/**
+ * @swagger
+ * /pedidos/historial:
+ *  get:
+ *    tags: [pedidos]
+ *    summary: Historial.
+ *    description : Historial de pedidos
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - in: header
+ *        name: userid 
+ *        required: true
+ *        description: Id del Usuario
+ *        example: 2
+ *    responses:
+ *      200:
+ *       description: OK
+ *      401:
+ *       description: Invalido
+ *      
+ */
+
+app.get("/pedidos/historial", validaLogin, verHistorial);
+
+/**
+ * @swagger
+ * /pedidos/modifica/{pedidoId}:
+ *  post:
+ *    tags: [pedidos]
+ *    summary: Modificar un pedido.
+ *    description : Administrador modifica estado de pedidos
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - in: header
+ *        name: userid 
+ *        required: true
+ *        description: Id del Usuario Administrador
+ *        example: 1
+ *      - in: body
+ *        name: estado de pedido
+ *        description: Cambiar el estado del pedido
+ *        schema:
+ *          type: object
+ *          required:
+ *            - estado
+ *          properties:
+ *            estado:
+ *              description: estado de pedido
+ *              type: string
+ *              example: En preparación
+ *    responses:
+ *      200:
+ *       description: OK
+ *      401:
+ *       description: Invalido
+ *      
+ */
+
 
 app.put("/pedidos/modifica/:pedidoId", validAdmin,modificarPedido); 
 
 
 
-
-
-app.delete("/pedidos/:idPedido", validAdmin, eliminarPedido); 
-
-app.post("/productos/:idPedido/:idProducto", );
-
-app.delete("/productos/:idPedido/:idProducto", );
-
 //////////////////////forma de pago
+
+/**
+ * @swagger
+ * /mediosdepago:
+ *  get:
+ *    tags: [formas de pago]
+ *    summary: Ver formas de pago.
+ *    description: Se visualizan las formas de pago.
+ *    parameters:
+ *      - name: userid
+ *        in: header
+ *        required: true
+ *        description: Id del Usuario Administrador.
+ *        schema:
+ *          type: integer
+ *          format: int64
+ *          minimum: 1
+ *    responses:
+ *       '200':
+ *        description: OK
+ *       '401':
+ *        description: Invalido
+ */
 
 app.get("/mediosdepago", validAdmin, verFormaPago);
 
+/**
+ * @swagger
+ * /mediosdepago:
+ *  post:
+ *    tags: [formas de pago]
+ *    summary: Crear nueva forma de pago
+ *    description : Crea un metodo de pago
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - in: header
+ *        name: userid 
+ *        required: true
+ *        description: Id del Usuario Administrador
+ *      - in: body
+ *        name: metodo de pago
+ *        description: Crear un nuevo metodo de pago
+ *        schema:
+ *          type: object
+ *          required:
+ *            - detalle
+ *          properties:
+ *            detalle:
+ *              description: metodo de pago
+ *              type: string
+ *              example: mercado pago
+ *    responses:
+ *      200:
+ *       description: OK
+ *      401:
+ *       description: Invalido
+ *      
+ */
+
 app.post("/mediosdepago", validAdmin, crearPago); 
+
+/**
+ * @swagger
+ * /mediosdepago/{idFormaPago}:
+ *  delete:
+ *    tags: [formas de pago]
+ *    summary: Elimina forma de pago
+ *    description : Elimina una forma de pago existente
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - in: header
+ *        name: userid 
+ *        required: true
+ *        description: Id del Usuario Administrador
+ *      - name: idFormaPago
+ *        in: path 
+ *        required: true
+ *        type: integer      
+ *        description: Id de forma de pago a eliminar
+ *        example: 3
+ *    responses:
+ *      200:
+ *       description: OK
+ *      401:
+ *       description: Invalido
+ *      
+ */
+
 
 app.delete("/mediosdepago/:idFormaPago", validAdmin, eliminarFormaPago); 
 
-
+/**
+ * @swagger
+ * /mediosdepago/{idFormaPago}:
+ *  put:
+ *    tags: [formas de pago]
+ *    summary: Modificar forma de pago
+ *    description : Modificar un metodo de pago
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - in: header
+ *        name: userid 
+ *        required: true
+ *        description: Id del Usuario Administrador
+ *      - name: idFormaPago
+ *        in: path 
+ *        required: true
+ *        type: integer      
+ *        description: Id de forma de pago a modificar
+ *        example: 3
+ *      - in: body
+ *        name: metodo de pago
+ *        description: Modificar metodo de pago
+ *        schema:
+ *          type: object
+ *          required:
+ *            - detalle
+ *          properties:
+ *            detalle:
+ *              description: metodo de pago 
+ *              type: string
+ *              example: mercado pago
+ *    responses:
+ *      200:
+ *       description: OK
+ *      401:
+ *       description: Invalido
+ *      
+ */
 app.put("/mediosdepago/:idFormaPago", validAdmin, modificaFormaPago);
 
 
