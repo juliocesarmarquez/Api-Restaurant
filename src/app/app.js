@@ -46,7 +46,7 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 app.use(express.json());
 
 
-/////////////////////importar archivos particulares//
+/////////////////////importar archivos particulares////////////
 
 const { verUsuarios } = require('../info/usuarios');
 const { registraUsuario, loginUsuario } = require('../info/validacion');
@@ -58,7 +58,7 @@ const { crearPago, eliminarFormaPago, modificaFormaPago, verFormaPago } = requir
 
 
 
-/////////////////////validaciones
+/////////////////////validaciones///////////////////////
 
 /**
  * @swagger
@@ -101,7 +101,7 @@ const { crearPago, eliminarFormaPago, modificaFormaPago, verFormaPago } = requir
  *              example: 2901543514
  *            direccion:
  *              description: Dirección de envio 
- *              type: email
+ *              type: string
  *              example: Ushuaia, de los Ñires #3515
  *            contrasena:
  *              description: Contraseña del usuario
@@ -160,13 +160,14 @@ app.post('/login', loginUsuario );
  * @swagger
  * /usuarios:
  *  get:
+ *    tags: [usuarios]
  *    summary: Listado de usuarios.
  *    description: Se visualizan los usuarios.
  *    parameters:
  *      - name: userid
  *        in: header
  *        required: true
- *        description: Id del Usuario.
+ *        description: Id del Usuario Administrador.
  *        schema:
  *          type: integer
  *          format: int64
@@ -174,7 +175,7 @@ app.post('/login', loginUsuario );
  *    responses:
  *       '200':
  *        description: OK
- *       '405':
+ *       '401':
  *        description: Invalido
  */
 app.get('/usuarios', validAdmin, verUsuarios );
@@ -185,6 +186,7 @@ app.get('/usuarios', validAdmin, verUsuarios );
  * @swagger
  * /productos:
  *  get:
+ *    tags: [productos]
  *    summary: Listado de los platos.
  *    description: Se visualizan los platos disponibles.
  *    parameters:
@@ -199,47 +201,122 @@ app.get('/usuarios', validAdmin, verUsuarios );
  *    responses:
  *       '200':
  *        description: OK
- *       '405':
+ *       '401':
  *        description: Invalido
  */
-app.get("/productos", listarPlatos); 
+app.get('/productos', validaLogin, listarPlatos);
+
+//////////////////////platos
+/**
+ * @swagger
+ * /productos/admin:
+ *  get:
+ *    tags: [productos]
+ *    summary: Listado de los platos Admin.
+ *    description: Se visualizan los platos disponibles para Admin.
+ *    parameters:
+ *      - name: userid
+ *        in: header
+ *        required: true
+ *        description: Id del Usuario Administrador.
+ *        schema:
+ *          type: integer
+ *          format: int64
+ *          minimum: 1
+ *    responses:
+ *       '200':
+ *        description: OK
+ *       '401':
+ *        description: Invalido
+ */
+
+app.get('/productos/admin', validAdmin, listarPlatos);
 
 /**
  * @swagger
  * /productos:
  *  post:
- *    summary: Crear los platos
- *    description: Se crean los platos
+ *    tags: [productos]
+ *    summary: Crear nuevos platos.
+ *    description : Crea un nuevo un plato
+ *    consumes:
+ *      - application/json
  *    parameters:
- *      - name: userid
- *        in: header
+ *      - in: header
+ *        name: userid 
  *        required: true
- *        description: Id del Usuario
+ *        description: Id del Usuario Administrador
+ *      - in: body
+ *        name: platos
+ *        description: Crear plato
  *        schema:
- *          type: integer
- *          format: int64
- *          minimum: 1
- *    requestBody:
- *      required: true
- *      content: 
- *        application/json:
- *          schema:
- *            type: object
- *            properties:
- *              precio: 
- *                type: integer
- *                format: int64
- *                minimum: 1
- *              detalle:
- *                type: string
+ *          type: object
+ *          required:
+ *            - detalle
+ *            - precio
+ *          properties:
+ *            detalle:
+ *              description: detalle del plato
+ *              type: string
+ *              example: wok de fideos
+ *            precio:
+ *              description: precio del plato
+ *              type: number
+ *              example: 405
  *    responses:
- *       '200':
- *        description: OK
- *       '405':
- *        description: Invalido
+ *      200:
+ *       description: OK
+ *      401:
+ *       description: Invalido
+ *      
  */
 
-app.post("/productos", validAdmin, crearPlato); 
+app.post("/productos", validAdmin, crearPlato);  /// crear condicion error detalle y precio
+
+/**
+ * @swagger
+ * /productos/{platoId}:
+ *  put:
+ *    tags: [productos]
+ *    summary: Modificar un plato.
+ *    description : Modifica un plato existente
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - in: header
+ *        name: userid 
+ *        required: true
+ *        description: Id del Usuario Administrador
+ *      - name: platoId
+ *        in: path 
+ *        required: true
+ *        type: integer      
+ *        description: Id del plato a modificar
+ *      - in: body
+ *        name: platos
+ *        description: Modificar plato
+ *        schema:
+ *          type: object
+ *          required:
+ *            - detalle
+ *            - precio
+ *          properties:
+ *            detalle:
+ *              description: detalle del plato
+ *              type: string
+ *              example: wok de fideos
+ *            precio:
+ *              description: precio del plato
+ *              type: number
+ *              example: 405
+ *    responses:
+ *      200:
+ *       description: OK
+ *      406:
+ *       description: Invalido
+ *      
+ */
+
 
 
 app.put("/productos/:platoId", validAdmin, modificarPlato); 

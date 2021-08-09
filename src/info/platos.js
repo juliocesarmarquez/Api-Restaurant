@@ -28,19 +28,19 @@ function crearPlato(req, res) {
 
 function modificarPlato(req, res) {
     const platoId = Number(req.params.platoId)
-    for (let plato of platos){
-        if (plato.id === platoId ){
+    for (let plato of platos) {
+        if (plato.id === platoId) {
             const pla = platos.indexOf(plato);
             platos[pla].detalle = req.body.detalle;
             platos[pla].precio = req.body.precio;
-            
+
             res.status(200).json(`El producto ${plato.detalle} ha sido modificado con éxito.`);
         }
-    
+
     } res.status(406).json(`El producto no existe`);
 };
 
-    
+
 
 
 function eliminarPlato(req, res) {
