@@ -17,6 +17,7 @@ function crearPago(req, res) {
     nuevoPago.detalle = req.body.detalle;
     formaPago.push(nuevoPago);
     res.status(200).json(`El medio de pago ${nuevoPago.detalle} fue creado correctamente.`);
+
 }
 
 function verFormaPago(req, res) {
@@ -30,7 +31,7 @@ function eliminarFormaPago(req, res) {
             formaPago.splice(medioIndex, 1);
             res.status(200).json(`El medio de pago ${medio.detalle} ha sido eliminado correctamente.`);
         }
-    }
+    } res.status(401).json(`El medio de pago no existe`);
 }
 
 function modificaFormaPago(req, res) {
@@ -39,7 +40,7 @@ function modificaFormaPago(req, res) {
             medio.detalle = req.body.detalle;
             res.status(200).json(`El medio de pago ${medio.id} ha sido modificado correctamente.`);
         }
-    }
+    } res.status(401).json(`El medio de pago no existe`);
 }
 
 module.exports = { pagos, crearPago, verFormaPago, eliminarFormaPago, modificaFormaPago  }

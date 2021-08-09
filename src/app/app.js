@@ -50,6 +50,7 @@ app.use(express.json());
 
 const { verUsuarios } = require('../info/usuarios');
 const { registraUsuario, loginUsuario } = require('../info/validacion');
+const { midCrearPago } =  require('../middlewares/formapago');
 const { validAdmin, validaRegistro, validaLogin } =  require('../middlewares/validaciones');
 const { crearPedido, confirmarPedido, modificarPedido, eliminarPedido, listarPedidos, verHistorial } = require('../info/pedidos');
 const { crearPlato, listarPlatos, modificarPlato, eliminarPlato } = require('../info/platos');
@@ -62,9 +63,46 @@ const { crearPago, eliminarFormaPago, modificaFormaPago, verFormaPago } = requir
 
 /**
  * @swagger
- * /registro:
+ * /login:
  *  post:
  *    tags: [auth]
+ *    summary: Login de usuario.
+ *    description : Login de usuario.
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - in: body
+ *        name: datos
+ *        description: Nombre y contraseña de usuario a loguearse
+ *        schema:
+ *          type: object
+ *          required:
+ *            - username
+ *          properties:
+ *            username:
+ *              description: Nombre de usuario a loguearse.
+ *              type: string
+ *              example: manuginobili
+ *            contrasena:
+ *              description: Contraseña de usuario a loguearse 
+ *              type: string
+ *              example: gospursgo!
+ *    responses:
+ *      200:
+ *       description: Login de usuario satisfactorio. 
+ *      401:
+ *       description: Usuario no encontrado (email y/o contraseña incorrecta)
+ */
+
+ app.post('/login', loginUsuario );
+
+//////////////////////usuarios
+
+/**
+ * @swagger
+ * /registro:
+ *  post:
+ *    tags: [usuarios]
  *    summary: usuarios.
  *    description : Listado de usuarios.
  *    consumes:
@@ -116,45 +154,11 @@ const { crearPago, eliminarFormaPago, modificaFormaPago, verFormaPago } = requir
  */
 app.post('/registro', validaRegistro, registraUsuario);
 
-/**
- * @swagger
- * /login:
- *  post:
- *    tags: [auth]
- *    summary: Login de usuario.
- *    description : Login de usuario.
- *    consumes:
- *      - application/json
- *    parameters:
- *      - in: body
- *        name: datos
- *        description: Nombre y contraseña de usuario a loguearse
- *        schema:
- *          type: object
- *          required:
- *            - username
- *          properties:
- *            username:
- *              description: Nombre de usuario a loguearse.
- *              type: string
- *              example: manuginobili
- *            contrasena:
- *              description: Contraseña de usuario a loguearse 
- *              type: string
- *              example: gospursgo!
- *    responses:
- *      200:
- *       description: Login de usuario satisfactorio. 
- *      401:
- *       description: Usuario no encontrado (email y/o contraseña incorrecta)
- */
-
-app.post('/login', loginUsuario );
 
 
 
 
-//////////////////////usuarios
+
 
 /**
  * @swagger
@@ -590,7 +594,7 @@ app.get("/mediosdepago", validAdmin, verFormaPago);
  *      
  */
 
-app.post("/mediosdepago", validAdmin, crearPago); 
+app.post("/mediosdepago", validAdmin, midCrearPago, crearPago); 
 
 /**
  * @swagger
