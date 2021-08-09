@@ -52,7 +52,7 @@ const { verUsuarios } = require('../info/usuarios');
 const { registraUsuario, loginUsuario } = require('../info/validacion');
 const { midCrearPago } =  require('../middlewares/formapago');
 const { validAdmin, validaRegistro, validaLogin } =  require('../middlewares/validaciones');
-const { crearPedido, confirmarPedido, modificarPedido, eliminarPedido, listarPedidos, verHistorial } = require('../info/pedidos');
+const { crearPedido, confirmarPedido, modificarPedido, listarPedidos, verHistorial } = require('../info/pedidos');
 const { crearPlato, listarPlatos, modificarPlato, eliminarPlato } = require('../info/platos');
 const { crearPago, eliminarFormaPago, modificaFormaPago, verFormaPago } = require('../info/formapago');
 
