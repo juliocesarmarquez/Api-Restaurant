@@ -2,7 +2,7 @@ let listadoUsuarios = [
     {
         "id": 1,
         "noUsuario": "admin",
-        "noApellido": "Julio César Márquez",
+        "nombreyApellido": "Julio César Márquez",
         "mail": "julio@hotmail.com",
         "telefono": 15552855,
         "direccion": "De los ñires 123",

@@ -1,10 +1,10 @@
 const { listadoUsuarios } = require('./basedatos');
 
 class Usuario {
-    constructor(id, noUsuario, noApellido, mail, telefono, direccion, contrasena, login, esAdmin) {
+    constructor(id, noUsuario, nombreyApellido, mail, telefono, direccion, contrasena, login, esAdmin) {
         this.id = id;
         this.noUsuario = noUsuario;
-        this.noApellido = noApellido;
+        this.nombreyApellido = nombreyApellido;
         this.mail = mail;
         this.telefono = telefono;
         this.direccion = direccion;
@@ -34,17 +34,14 @@ function registraUsuario(req, res) {
     } else {
         nuevoUsuario.id = listadoUsuarios[listadoUsuarios.length - 1].id + 1;
     }
-
     nuevoUsuario.noUsuario = req.body.noUsuario;
-    nuevoUsuario.noApellido = req.body.noApellido;
+    nuevoUsuario.nombreyApellido = req.body.nombreyApellido;
     nuevoUsuario.mail = req.body.mail;
     nuevoUsuario.telefono = req.body.telefono;
     nuevoUsuario.direccion = req.body.direccion;
     nuevoUsuario.contrasena = req.body.contrasena;
     nuevoUsuario.login = false;
     nuevoUsuario.esAdmin = false;
-  
-
     listadoUsuarios.push(nuevoUsuario);
     res.status(200).json(`El usuario ${nuevoUsuario.id} fue creado con éxito.`);
 }

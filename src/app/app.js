@@ -10,7 +10,7 @@ const swaggerUI = require('swagger-ui-express');
 const swaggerOptions = {
     swaggerDefinition: {
         info: {
-            title: 'Mi primera API',
+            title: 'Mi primera API - Delilah Restó',
             version: '1.0.0'
         }
     },
@@ -115,7 +115,7 @@ const { crearPago, eliminarFormaPago, modificaFormaPago, verFormaPago } = requir
  *          type: object
  *          required:
  *            - noUsuario
- *            - noApellido
+ *            - nombreyApellido
  *            - mail
  *            - telefono
  *            - direccion
@@ -125,7 +125,7 @@ const { crearPago, eliminarFormaPago, modificaFormaPago, verFormaPago } = requir
  *              description: Nombre del usuario
  *              type: string
  *              example: manuginobili
- *            noApellido:
+ *            nombreyApellido:
  *              description: Nombre y Apellido del usuario
  *              type: string
  *              example: Emanuel David Ginobili
@@ -148,7 +148,7 @@ const { crearPago, eliminarFormaPago, modificaFormaPago, verFormaPago } = requir
  *    responses:
  *      200:
  *       description: Usuario registrado
- *      406:
+ *      401:
  *       description: El email ya esta registrado
  *      
  */
@@ -275,7 +275,7 @@ app.get('/productos/admin', validAdmin, listarPlatos);
  *      
  */
 
-app.post("/productos", validAdmin, crearPlato);  /// crear condicion error detalle y precio
+app.post("/productos", validAdmin, crearPlato);  
 
 /**
  * @swagger
@@ -316,12 +316,10 @@ app.post("/productos", validAdmin, crearPlato);  /// crear condicion error detal
  *    responses:
  *      200:
  *       description: OK
- *      406:
+ *      401:
  *       description: Invalido
  *      
  */
-
-
 
 app.put("/productos/:platoId", validAdmin, modificarPlato); 
 
@@ -470,33 +468,8 @@ app.post("/pedidos/confirma/:idFormaPago", validaLogin, confirmarPedido);
 
 /**
  * @swagger
- * /pedidos/historial:
- *  get:
- *    tags: [pedidos]
- *    summary: Historial.
- *    description : Historial de pedidos
- *    consumes:
- *      - application/json
- *    parameters:
- *      - in: header
- *        name: userid 
- *        required: true
- *        description: Id del Usuario
- *        example: 2
- *    responses:
- *      200:
- *       description: OK
- *      401:
- *       description: Invalido
- *      
- */
-
-app.get("/pedidos/historial", validaLogin, verHistorial);
-
-/**
- * @swagger
  * /pedidos/modifica/{pedidoId}:
- *  post:
+ *  put:
  *    tags: [pedidos]
  *    summary: Modificar un pedido.
  *    description : Administrador modifica estado de pedidos
@@ -507,6 +480,12 @@ app.get("/pedidos/historial", validaLogin, verHistorial);
  *        name: userid 
  *        required: true
  *        description: Id del Usuario Administrador
+ *        example: 1
+ *      - name: pedidoId
+ *        in: path 
+ *        required: true
+ *        type: integer      
+ *        description: Id del pedido a modificar
  *        example: 1
  *      - in: body
  *        name: estado de pedido
@@ -529,7 +508,34 @@ app.get("/pedidos/historial", validaLogin, verHistorial);
  */
 
 
-app.put("/pedidos/modifica/:pedidoId", validAdmin,modificarPedido); 
+ app.put("/pedidos/modifica/:pedidoId", validAdmin,modificarPedido); 
+
+/**
+ * @swagger
+ * /pedidos/historial:
+ *  get:
+ *    tags: [usuarios]
+ *    summary: Historial de pedidos.
+ *    description : Historial de pedidos
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - in: header
+ *        name: userid 
+ *        required: true
+ *        description: Id del Usuario
+ *        example: 2
+ *    responses:
+ *      200:
+ *       description: OK
+ *      401:
+ *       description: Invalido
+ *      
+ */
+
+app.get("/pedidos/historial", validaLogin, verHistorial);
+
+
 
 
 

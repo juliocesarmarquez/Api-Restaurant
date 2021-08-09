@@ -1,4 +1,4 @@
-const { listadoUsuarios, platos, listadoPedidos, formaPago } = require("../info/basedatos");
+const { listadoUsuarios } = require("../info/basedatos");
 
 function validAdmin(req, res, next) {
     for (const usuario of listadoUsuarios) {
@@ -8,20 +8,20 @@ function validAdmin(req, res, next) {
             }
         }
     }
-    res.status(401).json("No es administrador");
+    res.status(401).json(`No es administrador`);
 }
 
 
 function validaRegistro(req, res, next) {
     for (let nuevoUsuario of listadoUsuarios) {
     if (nuevoUsuario.mail === req.body.mail) {
-            res.status(406).json(`El email ya esta registrado`);
+            res.status(401).json(`El email ya esta registrado`);
             return;
         }
     }
     if (req.body.noUsuario === null || req.body.noUsuario === undefined) {
         res.status(406).json(`Nombre de usuario inválido`);
-    } else if (req.body.noApellido === null || req.body.noApellido === undefined) {
+    } else if (req.body.nombreyApellido === null || req.body.nombreyApellido === undefined) {
         res.status(406).json(`Nombre y apellido inválidos`);
     } else if (req.body.mail === null || req.body.mail === undefined) {
         res.status(406).json(`Email inválido`);
@@ -45,7 +45,7 @@ function validaLogin(req, res, next) {
             }
         }
     }
-    res.status(401).json("No es un usuario válido");
+    res.status(401).json(`No es un usuario válido`);
 };
 
 
@@ -58,13 +58,13 @@ function midLogin(req, res, next) {
             if (usuario.login) {
                 return next();
             } else {
-                res.status(406).json("Usted debe loguearse");
+                res.status(406).json(`Usted debe loguearse`);
             }
         }
     }
-    res.status(401).json("Id de Usuario inválido");
+    res.status(401).json(`Id de Usuario inválido`);
 }
 
-/* function midId */
 
-module.exports = { validAdmin, validaRegistro, validaLogin, midLogin/* , midId  */ }
+
+module.exports = { validAdmin, validaRegistro, validaLogin, midLogin }

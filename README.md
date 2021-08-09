@@ -3,14 +3,14 @@
 
 #### Detalle
 
-En el marco del Sprint Project 1 del Curso de Desarrollo Web Backend de ACAMICA, se creo una API para gestionar todos los pedidos del Delilah Restó.
+En el marco del Sprint Project 1 del Curso de Desarrollo Web Backend de ACAMICA, se creó una API para gestionar todos los pedidos del Delilah Restó.
 
 #### Tecnologías utilizadas:
 
-* git
+* Git
 * NodeJS
-* express
-* swagger
+* Express
+* Swagger
 
 #### Módulos de NodeJS utilizados:
 
