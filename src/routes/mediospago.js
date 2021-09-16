@@ -3,7 +3,7 @@ const app = express();
 
 const router = express.Router();
 
-const Controller = require('../controllers/mediospago.js');
+const Controller = require('../controllers/mediospagocontrollers.js');
 
 
 router.get('/', Controller.List);

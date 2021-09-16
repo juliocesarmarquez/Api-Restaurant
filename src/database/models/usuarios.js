@@ -1,21 +1,39 @@
-const sequelize = require('../index.js');
-const { DataTypes, Model } = require('sequelize');
+const { DataTypes } = require('sequelize');
 
 
 
-class usuarioModel extends Model { }
-usuarioModel.init({
-  nombreUsuario: DataTypes.STRING,
-  nombreApellido: DataTypes.STRING,
-  direccion: DataTypes.STRING,
-  email: DataTypes.STRING,
-  telefono: DataTypes.STRING,
-  contrasena: DataTypes.STRING,
-  admin: DataTypes.BOOLEAN, 
-  suspendido: DataTypes.BOOLEAN, 
-}, { sequelize, modelName: 'usuarios', underscored: true 
-});
+function usuarioModel (connection) {
+  const Usuarios = connection.define('Usuarios', {
+    nombreUsuario: {
+      type: DataTypes.STRING
+    },
+    nombreApellido: {
+      type: DataTypes.STRING
+    },
+    direccion: {
+      type: DataTypes.STRING
+    },
+    email: {
+      type: DataTypes.STRING
+    },
+    telefono: {
+      type: DataTypes.STRING
+    },
+    contrasena: {
+      type: DataTypes.STRING
+    },
+    admin: {
+      type: DataTypes.BOOLEAN
+    },
+    suspendido: {
+      type: DataTypes.BOOLEAN
+    }
+  })
+  return Usuarios;
+}
 
 
 
-module.exports = usuarioModel;
+module.exports = {
+  usuarioModel
+};

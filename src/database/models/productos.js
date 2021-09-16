@@ -1,17 +1,22 @@
-const sequelize = require('../index.js');
-const { DataTypes, Model } = require('sequelize');
+const { DataTypes } = require('sequelize');
 
 
+function productoModel (connection){
+  const Productos = connection.define ('Productos', {
+    precio: {
+      type: DataTypes.DECIMAL
+    },
+    nombre: {
+      type: DataTypes.STRING
+    },
+    descripcion: {
+      type: DataTypes.STRING
+    }
+  })
+  return Productos;
+}
 
-class productoModel extends Model { }
-productoModel.init({
-  precio: DataTypes.NUMBER,
-  nombre: DataTypes.STRING,
-  descripcion: DataTypes.STRING,
-  
-}, { sequelize, modelName: 'precios', underscored: true 
-});
 
-
-
-module.exports = productoModel;
+module.exports = {
+  productoModel
+};

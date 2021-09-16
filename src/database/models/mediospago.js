@@ -1,14 +1,25 @@
-const sequelize = require('../index.js');
-const { DataTypes, Model } = require('sequelize');
+const { DataTypes } = require('sequelize');
 
 
 
-class mediosPagoModel extends Model { }
-mediosPagoModel.init({
-  nombre: DataTypes.STRING,
-}, { sequelize, modelName: 'mediospago', underscored: true 
-});
+function mediosPagoModel (connection) {
+  const medPagos = connection.define('Medios_Pago',{
+    nombre: { 
+    type: DataTypes.STRING
+    
+    }
+    
+  })
+return medPagos;
+}
 
 
 
-module.exports = mediosPagoModel;
+
+
+module.exports = {
+  mediosPagoModel
+  }
+
+
+

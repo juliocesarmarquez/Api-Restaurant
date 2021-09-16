@@ -3,11 +3,14 @@ const app = express();
 
 const router = express.Router();
 
-const Controller = require('../controllers/usuarioscontrollers.js');
+const Controller = require('../controllers/pedidoscontrollers.js');
 
 
 router.get('/', Controller.List);
 router.post('/', Controller.Add);
+/* router.put('/:id', Controller.Update);
+router.delete('/:id', Controller.Delete); */
+
 
 
 module.exports = router;

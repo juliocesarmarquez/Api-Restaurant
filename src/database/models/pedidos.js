@@ -1,19 +1,27 @@
-const sequelize = require('../../database/index.js');
-const { DataTypes, Model } = require('sequelize');
+const { DataTypes } = require('sequelize');
 
 
+function pedidoModel (connection) {
+  const Pedidos = connection.define('Pedidos',{
+    estado: {
+      type: DataTypes.INTEGER,
+    },
+    horario: {
+      type: DataTypes.DATE,
+    },
+    metodopago: {
+      type: DataTypes.STRING,
+    },
+    montopago: {
+      type: DataTypes.DECIMAL,
+    },
+    direccion: {
+      type: DataTypes.STRING,
+    }
+  })
+  return Pedidos;
+}
 
-class pedidoModel extends Model { }
-pedidoModel.init({
-  estado: DataTypes.NUMBER,
-  hora: DataTypes.DATE,
-  metodopago: DataTypes.STRING,
-  montopago: DataTypes.NUMBER,
-  usuarioId: DataTypes.STRING,
-  direccion: DataTypes.STRING,
-}, { sequelize, modelName: 'pedidos', underscored: true 
-});
-
-
-
-module.exports = pedidoModel;
+module.exports = {
+  pedidoModel
+  }

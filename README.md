@@ -11,14 +11,22 @@ En el marco del Sprint Project 1 del Curso de Desarrollo Web Backend de ACAMICA,
 * NodeJS
 * Express
 * Swagger
+* Dotenv
+* Mariadb
+* Sequelize
 
 #### Módulos de NodeJS utilizados:
 
+* "dotenv": "^10.0.0"
 * "express": "^4.17.1"
+* "mariadb": "^2.5.4"
 * "morgan": "^1.10.0"
 * "nodemon": "^2.0.12"
+* "sequelize": "^6.6.5"
 * "swagger-jsdoc": "^6.1.0"
 * "swagger-ui-express": "^4.1.6"
+
+
 
 #### Instrucciones de instalación:
 
