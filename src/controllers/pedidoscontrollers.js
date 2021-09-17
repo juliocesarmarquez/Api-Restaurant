@@ -2,8 +2,7 @@
 const sequelize = require('../database/index');
 
 // Importación de modelos
-const pedidoModel = require('../database/models/pedidos');
-const tableName = 'pedidos';
+const { getModel } = require("../database/index.js");
 
 exports.List = async function (req, res, next) {
     try {

@@ -1,9 +1,8 @@
 // Conecta la base de datos
-const sequelize = require('../database/index');
-
+const { getModel } = require("../database/index.js");
 // Importación de modelos
 const mediosPagoModel = require('../database/models/mediospago');
-const tableName = 'mediospago';
+
 
 exports.List = async function (req, res, next) {
     try {

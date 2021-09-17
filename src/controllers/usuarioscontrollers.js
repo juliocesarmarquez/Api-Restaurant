@@ -2,12 +2,11 @@
 const sequelize = require('../database/index');
 
 // Importación de modelos
-const usuarioModel = require('../database/models/usuarios');
-const tableName = 'usuarios';
+const { getModel } = require("../database/index.js");
 
 exports.List = async function (req, res, next) {
     try {
-        const todos = await usuarioModel.findAll();
+        const todos = await getModel('Usuarios').findAll();
         console.log(todos);
         res.json(todos);
     }
@@ -19,7 +18,8 @@ exports.List = async function (req, res, next) {
 
 exports.Add = async (req, res) => {
     try {
-        const usu = await Usuario.find();
+        const Usuario = getModel('Usuarios');
+        const usu = await Usuario.findAll();
         const nuevoUsuario = await new Usuario();
         if (usu.length === 0) {
             nuevoUsuario.id = 1;
@@ -31,7 +31,7 @@ exports.Add = async (req, res) => {
         nuevoUsuario.direccion = req.body.direccion;
         nuevoUsuario.email = req.body.email;
         nuevoUsuario.telefono = req.body.telefono;
-        nuevoUsuario.contrasena = encript(req.body.contrasena);
+        nuevoUsuario.contrasena = req.body.contrasena;
         nuevoUsuario.admin = false;
         nuevoUsuario.suspendido = false;
         await nuevoUsuario.save();
