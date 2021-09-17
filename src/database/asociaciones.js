@@ -13,6 +13,6 @@ const estados = require ('./models/estados');
 // en la tabla de muchos referencia a usuarios
 
 //muchos a muchos
-
+/* 
 pedidos.belongsToMany(productos, { through: "pedido_productos"});
-productos.belongsToMany(pedidos, { through: "pedido_productos"}); 
+productos.belongsToMany(pedidos, { through: "pedido_productos"});  */
