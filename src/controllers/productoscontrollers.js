@@ -6,7 +6,7 @@ const { getModel } = require("../database/index.js");
 
 exports.List = async function (req, res, next) {
     try {
-        const todos = await productoModel.findAll();
+        const todos = await getModel('Productos').findAll();
         console.log(todos);
         res.json(todos);
     }
@@ -19,14 +19,15 @@ exports.List = async function (req, res, next) {
 
 exports.Add = async function (req, res, next) {
     try {
-        prod = {
+        const Productos = getModel('Productos');
+        const prod = new Productos ({
             precio:req.body.precio,
             nombre:req.body.nombre,
             descripcion:req.body.descripcion
 
-                    };
+                    });
         console.log(req.body, prod);
-        const resultado = await productoModel.create(prod);
+        const resultado = await prod.save();
         res.json(resultado.toJSON);
     }
     catch (err) {
@@ -37,13 +38,14 @@ exports.Add = async function (req, res, next) {
 
 exports.Update = async function (req, res, next) {
     try {
-        prod = {
+        const Producto = getModel('Productos');
+        const prod = ({
             precio:req.body.precio,
             nombre:req.body.nombre,
             descripcion:req.body.descripcion
-        };
+        });
         console.log(req.body, prod);
-        const resultado = await productoModel.update(prod, { where: { id: req.params.id } });
+        const resultado = await Producto.update(prod, { where: { id: req.params.id } });
         res.json({ status: resultado.toJSON });
     }
     catch (err) {
@@ -54,7 +56,8 @@ exports.Update = async function (req, res, next) {
 
 exports.Delete = async function (req, res, next) {
     try {
-        const resultado = await productoModel.destroy({
+        const Productos = getModel('Productos');
+        const resultado = await Productos.destroy({
             where: { id: req.params.id }
         });
         console.log(resultado)

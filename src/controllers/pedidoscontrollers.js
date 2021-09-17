@@ -6,7 +6,7 @@ const { getModel } = require("../database/index.js");
 
 exports.List = async function (req, res, next) {
     try {
-        const todos = await pedidoModel.findAll();
+        const todos = await getModel('Pedidos').findAll();
         console.log(todos);
         res.json(todos);
     }
@@ -18,8 +18,9 @@ exports.List = async function (req, res, next) {
 
 exports.Add = async function (req, res)  {
     try {
-        const ped = await pedidoModel.findAll();
-        const nuevoPedido = new pedidoModel();
+        const Pedidos = getModel('Pedidos');
+        const ped = await Pedidos.findAll();
+        const nuevoPedido = await new Pedidos();
         if (ped.length === 0) {
             nuevoPedido.id = 1;
         } else {
@@ -30,7 +31,7 @@ exports.Add = async function (req, res)  {
         nuevoPedido.metodopago = 0;
         nuevoPedido.montopago = 0;
         nuevoPedido.usuarioId = Number(req.headers.userid);
-        await nuevoPedido.create();
+        await nuevoPedido.save();
         res.status(200).json(`El pedido ${nuevoPedido.id} creado por el usuario ${nuevoPedido.usuarioId}`);
     } catch {
         res.status(400).json(`Su pedido no pudo ser guardado`);

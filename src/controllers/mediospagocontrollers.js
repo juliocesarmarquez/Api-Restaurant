@@ -1,12 +1,11 @@
 // Conecta la base de datos
 const { getModel } = require("../database/index.js");
 // Importación de modelos
-const mediosPagoModel = require('../database/models/mediospago');
 
 
 exports.List = async function (req, res, next) {
     try {
-        const todos = await mediosPagoModel.findAll();
+        const todos = await getModel('Medios_Pago').findAll();
         console.log(todos);
         res.json(todos);
     }
@@ -19,13 +18,13 @@ exports.List = async function (req, res, next) {
 
 exports.Add = async function (req, res, next) {
     try {
-        medpago = {
+        const Medpago = getModel('Medios_Pago')
+        const med = new Medpago ({
 
             nombre:req.body.nombre
 
-                    };
-        console.log(req.body, medpago);
-        const resultado = await mediosPagoModel.create(medpago);
+                    });
+        const resultado = await med.save();
         res.json(resultado.toJSON);
     }
     catch (err) {
@@ -36,11 +35,12 @@ exports.Add = async function (req, res, next) {
 
 exports.Update = async function (req, res, next) {
     try {
-        medpago = {
+        const Medpago = getModel('Medios_Pago')
+        const med = {
             nombre: req.body.nombre
         };
-        console.log(req.body, medpago);
-        const resultado = await mediosPagoModel.update(medpago, { where: { id: req.params.id } });
+        
+        const resultado = await Medpago.update(med, { where: { id: req.params.id } });
         res.json({ status: resultado.toJSON });
     }
     catch (err) {
@@ -51,7 +51,8 @@ exports.Update = async function (req, res, next) {
 
 exports.Delete = async function (req, res, next) {
     try {
-        const resultado = await mediosPagoModel.destroy({
+        const Medpago = getModel('Medios_Pago')
+        const resultado = await Medpago.destroy({
             where: { id: req.params.id }
         });
         console.log(resultado)
