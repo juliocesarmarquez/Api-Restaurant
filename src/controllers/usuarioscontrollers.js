@@ -1,8 +1,15 @@
+const jwt = require('jsonwebtoken');
+const { createHmac } = require('crypto');
 // Conecta la base de datos
 const sequelize = require('../database/index');
 
 // Importación de modelos
 const { getModel } = require("../database/index.js");
+//encript
+function encript(secret) {
+    return createHmac('sha256', secret).digest('hex');
+}
+
 
 exports.List = async function (req, res, next) {
     try {
@@ -16,28 +23,58 @@ exports.List = async function (req, res, next) {
     }
 };
 
-exports.Add = async (req, res) => {
+exports.Registro = async (req, res) => {
     try {
         const Usuario = getModel('Usuarios');
-        const usu = await Usuario.findAll();
+    
         const nuevoUsuario = await new Usuario();
-        if (usu.length === 0) {
-            nuevoUsuario.id = 1;
-        } else {
-            nuevoUsuario.id = usu[usu.length - 1].id + 1;
-        }
+        
         nuevoUsuario.nombreUsuario = req.body.nombreUsuario;
         nuevoUsuario.nombreApellido = req.body.nombreApellido;
         nuevoUsuario.direccion = req.body.direccion;
         nuevoUsuario.email = req.body.email;
         nuevoUsuario.telefono = req.body.telefono;
-        nuevoUsuario.contrasena = req.body.contrasena;
+        nuevoUsuario.contrasena = encript (req.body.contrasena);
         nuevoUsuario.admin = false;
         nuevoUsuario.suspendido = false;
+        
         await nuevoUsuario.save();
         res.status(200).json(`El usuario ${nuevoUsuario.nombreUsuario} ha sido registrado con éxito`);
+        
+
     } catch(e) {
         console.log(e);
         res.status(400).json(`Error al registrar un usuario`);
     }
 };
+
+    // login usuario
+    exports.Login = async (req, res) => {
+        try {
+            const usu = await getModel('Usuarios').findOne({ where: {nombreUsuario: req.body.nombreUsuario} });
+            if (usu.contrasena === encript(req.body.contrasena)) {
+                const token = jwt.sign({ nombreUsuario: usu.nombreUsuario }, usu.contrasena);
+                usu.login = true;
+                await usu.save();
+                res.status(200).json({
+                    Usuario: usu.nombreUsuario,
+                    Token: token
+                })
+            } else {
+                res.status(404).json(`Contraseña invalida`);
+            }
+        } catch {
+            res.status(404).json(`Error al loguearse`);
+        }
+
+    };
+
+    /*         jwt.sign(nuevoUsuario, process.env.JWT_SECRET_KEY, { expiresIn: process.env.JWT_EXPIRES_IN }, (err, token) => {
+            if (err) {
+                console.error("Error interno: " + err.message);
+                res.status(500).send({ status: 'Error interno' })
+            } else {
+                req.token = token;
+                res.json({ status: 'signup', token });
+            }
+        });    */ 

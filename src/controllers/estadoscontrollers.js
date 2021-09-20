@@ -1,9 +1,6 @@
-
+// Importación de modelos
 const { getModel } = require("../database/index.js");
 
-// Importación de modelos
-const estadosModel = require('../database/models/estados');
-/* const tableName = 'estados'; */ 
 
 exports.List = async function (req, res, next) {
     try {
@@ -14,6 +11,36 @@ exports.List = async function (req, res, next) {
     catch (err) {
         console.log(err.message);
         res.status(500).json({ status: 'Error interno', texto: err.message });
+    }
+};
+exports.Update = async function (req, res, next) {
+    try {
+        const Estado = getModel('Medios_Pago')
+        const est = {
+            nombre: req.body.nombre
+        };
+        
+        const resultado = await Estado.update(est, { where: { id: req.params.id } });
+        res.json({ status: resultado.toJSON });
+    }
+    catch (err) {
+        console.log(err.message);
+        res.status(500).json({ status: 'Error interno' });
+    }
+}
+
+exports.Delete = async function (req, res, next) {
+    try {
+        const Estado = getModel('Estado')
+        const resultado = await Estado.destroy({
+            where: { id: req.params.id }
+        });
+        console.log(resultado)
+        res.json({ resultado: resultado });
+    }
+    catch (err) {
+        console.log(err.message);
+        res.status(500).json({ status: 'Error interno' });
     }
 };
 

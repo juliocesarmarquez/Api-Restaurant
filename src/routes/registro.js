@@ -7,7 +7,7 @@ const router = express.Router();
 const Controller = require('../controllers/usuarioscontrollers.js');
 
 
-router.get('/', Controller.List);
+router.post('/', Controller.Registro);
 
 
 module.exports = router;

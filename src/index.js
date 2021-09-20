@@ -5,11 +5,17 @@ const dotenv = require("dotenv");
 
 
 // Info gestionada en MySQL
-const usuarioRouter = require('./routes/usuarios.js');
+const usuarioRouter = require ('./routes/usuarios.js')
+const registroRouter = require('./routes/registro.js');
 const mediosPagoRouter = require('./routes/mediospago.js');
 const productosRouter = require('./routes/productos.js');
 const pedidosRouter = require('./routes/pedidos.js');
-const estadosRouter = require('./routes/estados.js')
+const estadosRouter = require('./routes/estados.js');
+const loginRouter = require('./routes/login.js');
+
+// Middlewares
+const { authRegistro } = require('./middlewares/auth');
+
 
 // Info de asociaciones
 /* const asociaciones = require('../src/database/asociaciones.js'); */
@@ -44,7 +50,9 @@ async function main() {
 
     try {
         await connect(MARIADB_HOST, MARIADB_PORT, MARIADB_USER, MARIADB_PASSWORD, MARIADB_NAME);
-        app.use('/registro', usuarioRouter);
+        app.use('/registro',authRegistro, registroRouter );
+        app.use('/usuarios', usuarioRouter);     
+        app.use('/login', loginRouter);
         app.use('/mediospago', mediosPagoRouter);
         app.use('/productos', productosRouter);
         app.use('/pedidos', pedidosRouter ); 
