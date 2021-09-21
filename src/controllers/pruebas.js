@@ -259,7 +259,7 @@ router.put("/pedidos/:idPedido/:idProducto", midIdProducto, midIdPedido, async (
     }
 }) */
 
-/*     // ver pedidos
+/*     // ver pedidosdb
     router.get("/pedidos", authAdmin, async (req, res) => {
         try {
             const p = await Pedido.find();

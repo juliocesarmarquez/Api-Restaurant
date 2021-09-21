@@ -69,12 +69,17 @@ exports.Registro = async (req, res) => {
 
     };
 
-    /*         jwt.sign(nuevoUsuario, process.env.JWT_SECRET_KEY, { expiresIn: process.env.JWT_EXPIRES_IN }, (err, token) => {
-            if (err) {
-                console.error("Error interno: " + err.message);
-                res.status(500).send({ status: 'Error interno' })
-            } else {
-                req.token = token;
-                res.json({ status: 'signup', token });
-            }
-        });    */ 
+
+    //usuario suspendido
+    exports.Suspendido = async (req, res) => {
+        try {
+            const usuarioId = Number(req.params.idUsuario);
+            const usu = await Usuario.findOne({ where: {id: usuarioId} });
+            usu.suspendido = req.body.suspendido;
+            usu.save();
+            res.status(200).json(`El estado de suspensión de ${usu.nombreUsuario} ha sido modificado a ${usu.suspendido}`);
+        } catch {
+            res.status(404).json(`Error al suspender usuario`);
+        }
+    }
+

@@ -8,8 +8,8 @@ const Controller = require('../controllers/estadoscontrollers.js');
 
 router.get('/', Controller.List);
 router.post('/', Controller.Add);
-/* router.put('/:id', Controller.Update);
-router.delete('/:id', Controller.Delete); */
+router.put('/:id', Controller.Update);
+router.delete('/:id', Controller.Delete); 
 
 
 

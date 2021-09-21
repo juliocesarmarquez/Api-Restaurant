@@ -12,8 +12,8 @@ function encript(secret) {
 
 async function authUsuario(req, res, next) {
     try {
-        const idUsuario = Number(req.headers.userid);
-        const usu = await getModel('Usuarios').findOne({ id: idUsuario });
+        const usuarioId = Number(req.headers.userid);
+        const usu = await getModel('Usuarios').findOne({ where: {id: usuarioId }});
         const authHeader = req.headers.authorization || '';
         const token = authHeader.replace('Bearer ', '');
         jwt.verify(token, usu.contrasena, (err, decoded) => {
@@ -61,10 +61,10 @@ async function authRegistro(req, res, next) {
     }
 }
 
-async function midLogin(req, res, next) {
+/* async function midLogin(req, res, next) {
     try {
-        const idUsuario = Number(req.headers.userid);
-        const usu = await getModel('Usuarios').findOne({ id: idUsuario });
+        const usuarioId = Number(req.headers.userid);
+        const usu = await getModel('Usuarios').findOne({ id: usuarioId });
         if (usu.login === true) {
             return next();
         } else {
@@ -75,7 +75,7 @@ async function midLogin(req, res, next) {
         res.status(404).json(`Se produjo un error`);
     }
 }
-
+ */
     function authLogin(req, res, next) {
     if (req.body.nombreUsuario === null || req.body.nombreUsuario === undefined) {
         res.status(406).json("Nombre de usuario inválido");
@@ -87,42 +87,46 @@ async function midLogin(req, res, next) {
 } 
 
 
-
+/* 
 async function midSuspendido(req, res, next) {
-    const idUsuario = Number(req.headers.userid);
-    const usu = await getModel('Usuarios').findOne({ id: idUsuario });
+    const usuarioId = Number(req.headers.usuarioid);
+    const usu = await getModel('Usuarios').findOne({ where: {id: usuarioId} });
     if (usu.suspendido === true) {
         res.status(401).json(`Usted está suspendido`);
     } else {
         return next();
     }
 }
-
+ */
 async function authAdmin(req, res, next) {
     try {
-        const { JWT_SECRET } = process.env;
-        const authHeader = req.headers.authorization || '';
-        const token = authHeader.replace('Bearer ', '');
-        jwt.verify(token, encript(JWT_SECRET), (err, decoded) => {
-            if (err) {
-                console.log(err);
-                res.status(401).send('You are not authorized.   .|.');
-            } else {
-                req.user = decoded;
-                next();
-            }
-        });
-    } catch {
-        res.status(404).json(`Se produjo un error`);
+        if (!req.headers.authorization) {
+            console.error("Acceso denegado por falta de información de autorización");
+            res.status(403).send({ status: 'Acceso denegado' })
+        } else {
+            const token = req.headers.authorization.split(' ')[1]
+            jwt.verify(token, process.env.JWT_SECRET_KEY, (err, authData) => {
+                if (err) {
+                    console.error("Acceso denegado: " + err.message);
+                    res.status(403).send({ status: 'Acceso denegado' })
+                } else {
+                    req.authData = authData;
+                    next();
+                }
+            });
+        }
     }
-} 
-
+    catch (err) {
+        console.error("Error interno: " + err.message);
+        res.status(500).send({ status: 'Error interno' });
+    }
+};
 module.exports = {
-    /* authAdmin, */
+    authAdmin,
     authUsuario, 
     authRegistro,
     authLogin,
-    midLogin,
-    midSuspendido,
+    /* midLogin */
+/*     midSuspendido, */
     encript 
 }

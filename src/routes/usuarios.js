@@ -8,6 +8,7 @@ const Controller = require('../controllers/usuarioscontrollers.js');
 
 
 router.get('/', Controller.List);
+router.post ('/:usuarioId', Controller.Suspendido)
 
 
 module.exports = router;

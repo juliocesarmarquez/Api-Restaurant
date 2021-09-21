@@ -14,7 +14,7 @@ const estadosRouter = require('./routes/estados.js');
 const loginRouter = require('./routes/login.js');
 
 // Middlewares
-const { authRegistro } = require('./middlewares/auth');
+const { authRegistro, authLogin, midSuspendido, authAdmin } = require('./middlewares/auth');
 
 
 // Info de asociaciones
@@ -51,8 +51,8 @@ async function main() {
     try {
         await connect(MARIADB_HOST, MARIADB_PORT, MARIADB_USER, MARIADB_PASSWORD, MARIADB_NAME);
         app.use('/registro',authRegistro, registroRouter );
-        app.use('/usuarios', usuarioRouter);     
-        app.use('/login', loginRouter);
+        app.use('/usuarios', authAdmin, usuarioRouter);     
+        app.use('/login', authLogin, /* midSuspendido, */loginRouter);
         app.use('/mediospago', mediosPagoRouter);
         app.use('/productos', productosRouter);
         app.use('/pedidos', pedidosRouter ); 

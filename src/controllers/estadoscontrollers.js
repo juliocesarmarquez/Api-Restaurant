@@ -15,7 +15,7 @@ exports.List = async function (req, res, next) {
 };
 exports.Update = async function (req, res, next) {
     try {
-        const Estado = getModel('Medios_Pago')
+        const Estado = getModel('Estados')
         const est = {
             nombre: req.body.nombre
         };
