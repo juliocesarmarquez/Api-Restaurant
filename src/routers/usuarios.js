@@ -76,7 +76,9 @@ function creaUsuariosRouter(params) {
         } catch (error) {
             res.status(500).send({ message: error.message });
         }
-    });///To suspend clients
+    });
+    
+    ///To suspend clients
     router.put('/usuarios/:id', verifyToken, verifyAdmin, async (req, res) => {
         try {
             const data = await getModel('Usuarios').findOne({

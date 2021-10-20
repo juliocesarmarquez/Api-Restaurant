@@ -19,7 +19,7 @@ async function initialize() {
     }
     const Producto = getModel('Productos');
     const current1 = await Producto.findOne({
-        name: 'Curry kare'
+        nombre: 'Curry kare'
     })
     if (!current1) {
         Producto.create({

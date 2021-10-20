@@ -10,8 +10,8 @@ license:
   name: Apache 2.0
   url: https://www.apache.org/licenses/LICENSE-2.0.html
 servers:
-  - url: http://localhost:3000/api/v1
-    description: Development server
+  - url: http://localhost:3000/api/
+    description: Servidor Desarrollo
 paths:
   /registro:
     post:

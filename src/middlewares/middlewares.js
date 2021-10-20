@@ -41,7 +41,7 @@ function verifyAdmin(req, res, next) {
 function verifySuspend(req, res, next) {
     const { JWT_SECRET } = process.env
     jwt.verify(req.token, JWT_SECRET, async (error, authData) => {
-        if (authData.mail.disabled === false) {
+        if (authData.mail.suspendido === false) {
            return next();
         }
         else {
