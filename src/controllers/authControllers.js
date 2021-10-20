@@ -1,1 +1,0 @@
-const { getModel } = require("../database/index.js");
