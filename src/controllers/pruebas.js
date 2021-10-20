@@ -1,3 +1,38 @@
+exports.authenticated = function authenticated(req, res, next) {
+    // TODO: Implementar acceso a base de datos
+    // NOTE: Requiere que la petición incluye en el campo headers una clave (key) de la forma
+    //       Bearer {token}, donde este token haya sido suministrado por signin o signup
+    try {
+        if (!req.headers.authorization) {
+            console.error("Acceso denegado por falta de información de autorización");
+            res.status(403).send({ status: 'Acceso denegado' })
+        } else {
+            const token = req.headers.authorization.split(' ')[1]
+            jwt.verify(token, process.env.JWT_SECRET_KEY, (err, authData) => {
+                if (err) {
+                    console.error("Acceso denegado: " + err.message);
+                    res.status(403).send({ status: 'Acceso denegado' })
+                } else {
+                    req.authData = authData;
+                    next();
+                }
+            });
+        }
+    }
+    catch (err) {
+        console.error("Error interno: " + err.message);
+        res.status(500).send({ status: 'Error interno' });
+    }
+};
+
+
+
+
+
+
+
+
+
 /* function makeUsuariosRouter() {
 
     const router = Router();

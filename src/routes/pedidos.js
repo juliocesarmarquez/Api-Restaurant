@@ -8,8 +8,6 @@ const Controller = require('../controllers/pedidoscontrollers.js');
 
 router.get('/', Controller.List);
 router.post('/', Controller.Add);
-/* router.put('/:id', Controller.Update);
-router.delete('/:id', Controller.Delete); */
 
 
 

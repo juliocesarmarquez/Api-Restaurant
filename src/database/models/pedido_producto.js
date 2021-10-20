@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 
 
 function pedidoProductoModel (connection) {
-  const Estado = connection.define('Pedido_Producto',{
+  const PedidoProd = connection.define('Pedido_Producto',{
     cantidad: {
         type: DataTypes.INTEGER,      
       },
@@ -12,7 +12,7 @@ function pedidoProductoModel (connection) {
       },
     
   })
-  return Estado;
+  return PedidoProd;
 }
 
 module.exports = {

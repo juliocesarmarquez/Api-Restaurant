@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { createHmac } = require('crypto');
-
+const dotenv = require("dotenv");
 const { getModel } = require("../database/index.js");
-/* const { getModel } = require("../database/models/usuarios"); */
+
 
 function encript(secret) {
     return createHmac('sha256', secret).digest('hex');
@@ -12,7 +12,7 @@ function encript(secret) {
 
 async function authUsuario(req, res, next) {
     try {
-        const usuarioId = Number(req.headers.userid);
+        const usuarioId = Number(req.headers.id);
         const usu = await getModel('Usuarios').findOne({ where: {id: usuarioId }});
         const authHeader = req.headers.authorization || '';
         const token = authHeader.replace('Bearer ', '');
@@ -57,7 +57,7 @@ async function authRegistro(req, res, next) {
         }
 
     } catch {
-        res.status(404).json(`Se produjo un error`);
+        res.status(403).json(`Se produjo un error`);
     }
 }
 
@@ -98,29 +98,50 @@ async function midSuspendido(req, res, next) {
     }
 }
  */
-async function authAdmin(req, res, next) {
-    try {
-        if (!req.headers.authorization) {
-            console.error("Acceso denegado por falta de información de autorización");
-            res.status(403).send({ status: 'Acceso denegado' })
-        } else {
-            const token = req.headers.authorization.split(' ')[1]
-            jwt.verify(token, process.env.JWT_SECRET_KEY, (err, authData) => {
-                if (err) {
-                    console.error("Acceso denegado: " + err.message);
-                    res.status(403).send({ status: 'Acceso denegado' })
-                } else {
-                    req.authData = authData;
-                    next();
-                }
-            });
+
+function authAdmin(req, res, next) {
+    const { JWT_SECRET } = process.env
+    jwt.verify(req.token, JWT_SECRET, (error, authData) => {
+        console.log(error)
+        console.log(authData)
+        if (authData.usuario.admin === true) {
+            
+           return next();
         }
-    }
-    catch (err) {
-        console.error("Error interno: " + err.message);
-        res.status(500).send({ status: 'Error interno' });
-    }
+        else {
+            res.status(404).send(`No esta autorizado.`);
+        }
+    })
 };
+
+
+function verificaToken (req, res,next){
+    bearerHeader = req.headers['authorization'];
+    if(typeof bearerHeader !== 'undefined'){
+        const {JWT_SECRET} = process.env;
+        const bearerToken = bearerHeader.split(" ")[1];
+        req.token = bearerToken
+        jwt.verify(req.token,JWT_SECRET, (error, authData) =>{
+            if(error){
+                console.log(error)
+                return res.send("No es válido");
+            }
+            req.nombreUsuario = authData
+            return next();
+        })
+    } else {
+        res.send("No se encuentra token")
+    }
+
+}
+
+
+
+
+
+
+
+
 module.exports = {
     authAdmin,
     authUsuario, 
@@ -128,5 +149,6 @@ module.exports = {
     authLogin,
     /* midLogin */
 /*     midSuspendido, */
-    encript 
+    encript,
+    verificaToken
 }

@@ -1,0 +1,582 @@
+openapi: 3.0.1
+title: Sample API
+description: API Restaurant.
+termsOfService: http://example.com/terms/
+contact:
+  name: API Support
+  url: http://www.example.com/support
+  email: support@example.com
+license:
+  name: Apache 2.0
+  url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: http://localhost:3000/api/
+    description: Sprint 2 - Persistencia
+paths:
+  /registro:
+    post:
+      summary: Crear un usuario.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/regUsuario'
+      responses: 
+        '201':
+          description: Registrado con éxito.
+        '406':
+          description: El nombre de usuario ya existe. 
+      tags:
+        - Usuario
+  /login:
+    post:
+      summary: Login.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+      responses: 
+        '201':
+          description: Login exitoso.
+        '406':
+          description: Usuario y/o Contraseña incorrecta. 
+      tags:
+        - Usuario
+  /usuarios:
+    get: 
+      security:
+        - bearerAuth: []
+      summary: Muestra listado de Usuarios.
+      description: listado de usuarios.
+      responses:
+        '200':
+          description: lista usuarios
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+      tags:
+        - Admin
+  /usuarios/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      description: Permite al admin ver información del usuario. 
+      summary: Muestra usuarios.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: usuario id
+      responses:
+        '200':
+          description: Usuario
+        '401':
+          description: El usuario no existe.
+      tags:
+        - Admin
+    put:
+      security:
+        - bearerAuth: []
+      description: Permite al Admin suspender un usuario. 
+      summary: suspender un usuario
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: Usuario Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuspenderUsuario'
+      responses:
+        '200':
+          description: Usuario
+        '401':
+          description: El usuario no existe.
+      tags:
+        - Admin 
+  /productos:
+    get:
+      security:
+        - bearerAuth: []
+      description: Listado de los productos
+      summary: Lista productos.
+      responses:
+        '200':
+          description: productos
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+      tags:
+        - Usuario
+    post:
+      security:
+        - bearerAuth: []
+      description: Permite al admin agregar productos
+      summary: Agrega productos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgregaProductos'
+      responses:
+        '200':
+          description: Productos
+        '401':
+          description: No se guardo el producto.
+      tags:
+        - Admin
+  /productos/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      description: Permite al Admin ver los productos por Id.
+      summary: Muestra producto.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: productos Id
+      responses:
+        '200':
+          description: Producto
+        '401':
+          description: El producto no se encuentra.
+      tags:
+        - Admin
+    put:
+      security:
+        - bearerAuth: []
+      description: Permite al Admin modificar el producto.
+      summary: Edita el producto.
+      parameters: 
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: Producto Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditaProductos'
+      responses:
+        '200':
+          description: Producto actualizado.
+        '403':
+          description: No tiene permisos de Admin.
+        '404':
+          description: El producto no existe.  
+      tags:
+        - Admin
+    delete:
+      security:
+        - bearerAuth: []
+      description: Permite al Admin eliminar un producto.
+      summary: elimina el producto.
+      parameters: 
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: Producto Id
+      responses:
+        '200':
+          description: Producto eliminado.
+        '403':
+          description: No tiene permisos de Admin.
+        '404':
+          description: El producto no existe. 
+      tags:
+        - Admin
+  /mediospago:
+    get:
+      security:
+        - bearerAuth: []
+      description: Muestra el listado de Medios de Pago.
+      summary: Listado de Medios de Pago.
+      responses:
+        '200':
+          description: Medios de Pago
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+      tags:
+        - Usuario
+    post:
+      security:
+        - bearerAuth: []
+      description: Permite al Admin agregar Medios de Pago.
+      summary: Agrega Medios de Pago.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgregaPagos'
+      responses:
+        '200':
+          description: Medio de Pago agregado.
+        '401':
+          description: No se pudo guardar el Medio de Pago.
+      tags:
+        - Admin
+  /mediospago/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      description: Permite al Admin ver Medios de Pago por Id.
+      summary: Muestra el Medio de Pago.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: Medios de Pago Id.
+      responses:
+        '200':
+          description: Medios de Pago
+        '401':
+          description: Medio de pago no existe.
+      tags:
+        - Admin
+    put:
+      security:
+        - bearerAuth: []
+      description: Permite al Admin modificar el Medio de Pago.
+      summary: Editar el Medio de Pago.
+      parameters: 
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: Medio de Pago Id.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditaPagos'
+      responses:
+        '200':
+          description: Medio de pago actualizado.
+        '403':
+          description: No tiene permisos de admin.
+        '404':
+          description: Medio de Pago no existe.  
+      tags:
+        - Admin
+    delete:
+      security:
+        - bearerAuth: []
+      description: Permite al Admin eliminar el Medio de Pago.
+      summary: Elimina medio de pago
+      parameters: 
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: Medio de Pago Id.
+      responses:
+        '200':
+          description: Medio de Pago Eliminado
+        '403':
+          description: No tiene permisos de Admin.
+        '404':
+          description: Medio de Pago no existe. 
+      tags:
+        - Admin
+  /estados:
+    get:
+      security:
+        - bearerAuth: []
+      description: Muestra el estado.
+      summary: Listado de estados.
+      responses:
+        '200':
+          description: Estados
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+      tags:
+        - Admin
+    post:
+      security:
+        - bearerAuth: []
+      description: Permite al Admin agregar Estados.
+      summary: Agrega mas estados.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgregaEstados'
+      responses:
+        '200':
+          description: Estados
+        '401':
+          description: No se pudo guardar el estado.
+      tags:
+        - Admin
+  /pedidos:
+    post:
+      security:
+        - bearerAuth: []
+      description: Permite al Usuario realizar un pedido.
+      summary: Agrega productos al pedido. 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgregaProductosPedidos'
+      responses:
+        '201':
+          description: Pedido ok
+        '500':
+          description: No se envió el pedido.
+      tags:
+        - Usuario
+    get:
+      security:
+        - bearerAuth: []
+      description: Listado de los pedidos. 
+      summary: Lista pedidos.
+      responses:
+        '200':
+          description: Pedidos.
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+        '404':
+          description: No tiene permisos de Admin.
+      tags:
+        - Admin      
+  /pedidos/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      description: Ver un pedido
+      summary: Pedido.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: Pedido Id
+      responses:
+        '200':
+          description: Pedido
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+        '404':
+          description: No tiene permisos de Admin.
+      tags:
+        - Admin
+    put:
+      security:
+        - bearerAuth: []
+      description: Permite al Admin editar el estado del Pedido.
+      summary: edita el estado del pedido.
+      parameters: 
+        - in: path 
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: Pedido Id.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditaPedidos'
+      responses:
+        '200':
+          description: Pedido actualizado.
+        '401':
+          description: El pedido no existe.
+      tags:
+        - Admin
+    delete:
+      security:
+        - bearerAuth: []
+      description: Permite al Admin eliminar un pedido.
+      summary: elimina un pedido.
+      parameters: 
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: Pedido Id.
+      responses:
+        '200':
+          description: Pedido eliminado.
+        '403':
+          description: No tiene permisos de Admin.
+        '404':
+          description: Pedido no existe. 
+      tags:
+        - Admin
+  /historial:
+    get:
+      security:
+        - bearerAuth: []
+      description: Historial de pedidos
+      summary: pedidos.
+      responses:
+        '200':
+          description: listado de pedidos
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: string
+      tags:
+        - Usuario  
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    regUsuario:
+      properties:
+        nombreUsuario: 
+          type: string
+        nombreApellido: 
+          type: string
+        direccion: 
+          type: string
+        email: 
+          type: string 
+        telefono: 
+          type: integer
+        contrasena: 
+          type: string   
+    Usuario:
+      properties:
+        nombreUsuario:
+          type: string
+        contrasena:
+          type: string
+    SuspenderUsuario:
+      parameters: 
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: Usuario Id
+      properties:
+        disabled: 
+          type: boolean
+    AgregaProductos:
+      properties:
+        name:
+          type: string
+        price:
+          type: integer
+    EditaProductos:
+      parameters: 
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: Productos Id
+      properties:
+        name:
+          type: string
+        price:
+          type: integer
+    AgregaPagos:
+      properties:
+        name:
+          type: string
+    EditaPagos:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: Medios Pago Id 
+      properties:
+        name:
+          type: string
+    AgregaEstados:
+      properties:
+        name:
+          type: string    
+    EditaPedidos:
+      parameters: 
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: Pedidos Id  
+      properties:
+        StatusId:
+          type: integer
+    AgregaProductosPedidos:
+      properties:
+        address:
+          type: string
+        PaymentId:
+          type: integer
+        products:
+          type: array
+          items: 
+            properties:
+              id:
+                type: integer
+                description: Producto Id
+              quantity:
+                type: integer
+                description: Numero de producto
+            example: 
+              id: 1
+              quantity: 2        

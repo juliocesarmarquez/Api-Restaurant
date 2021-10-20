@@ -6,9 +6,6 @@ function pedidoModel (connection) {
     horario: {
       type: DataTypes.DATE,
     },
-    total: {
-      type: DataTypes.DECIMAL,
-    },
     direccion: {
       type: DataTypes.STRING,
     }

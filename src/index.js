@@ -10,15 +10,31 @@ const registroRouter = require('./routes/registro.js');
 const mediosPagoRouter = require('./routes/mediospago.js');
 const productosRouter = require('./routes/productos.js');
 const pedidosRouter = require('./routes/pedidos.js');
+const pedidosRouterAdm = require('./routes/pedidosAdmin.js')
 const estadosRouter = require('./routes/estados.js');
 const loginRouter = require('./routes/login.js');
 
 // Middlewares
-const { authRegistro, authLogin, midSuspendido, authAdmin } = require('./middlewares/auth');
+const { authRegistro, authLogin, midSuspendido, authAdmin, authUsuario, verificaToken } = require('./middlewares/auth');
 
+//swaggerUI
+const swaggerUi = require('swagger-ui-express');
+const yaml = require('js-yaml');
+const fs = require('fs');
+
+function loadSwaggerinfo(app) {
+    try {
+        const doc = yaml.load(fs.readFileSync('./src/spec.yaml', 'utf8'));
+        app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(doc));
+    } catch (e) {
+        console.log(e);
+    }
+};
 
 // Info de asociaciones
-/* const asociaciones = require('../src/database/asociaciones.js'); */
+
+const { makeRouter: makeUsersRouter } = require('../src/test/uTest');
+
 
 // Importaciones adicionales
 /* const cors = require('cors');
@@ -50,13 +66,17 @@ async function main() {
 
     try {
         await connect(MARIADB_HOST, MARIADB_PORT, MARIADB_USER, MARIADB_PASSWORD, MARIADB_NAME);
-        app.use('/registro',authRegistro, registroRouter );
-        app.use('/usuarios', authAdmin, usuarioRouter);     
-        app.use('/login', authLogin, /* midSuspendido, */loginRouter);
-        app.use('/mediospago', mediosPagoRouter);
-        app.use('/productos', productosRouter);
-        app.use('/pedidos', pedidosRouter ); 
-        app.use('/estados', estadosRouter);
+        app.use('/api/registro',authRegistro, registroRouter );
+        app.use('/api/login', authLogin, /* midSuspendido, */loginRouter);
+        app.use('/api/productos', authUsuario/* authAdmin */, productosRouter);
+        app.use('/api/mediospago', authAdmin,mediosPagoRouter);
+        app.use('/api/admin/pedidos', authAdmin, pedidosRouterAdm );
+        app.use('/api/pedidos',authLogin, pedidosRouter ); 
+        app.use('/api/historial',authLogin, pedidosRouter );
+        app.use('/api/usuarios',  authAdmin, usuarioRouter);     
+        app.use('/api/estados', authAdmin, estadosRouter);
+        app.use('/api/usuariotest', makeUsersRouter());
+        loadSwaggerinfo(app);
 
         app.listen(SERVER_PORT, () => {
             console.log('Server is running...');
@@ -68,3 +88,5 @@ async function main() {
 }
 
 main();
+
+module.exports = {main}; 
