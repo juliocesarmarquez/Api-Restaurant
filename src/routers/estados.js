@@ -21,7 +21,7 @@ function creaEstadosRouter(params) {
             if (saved) {
                 res.status(201).send(saved);
             } else {
-                res.status(500).send('Could not save the status.');
+                res.status(500).send('No se guardo la información.');
             }
         } catch (error) {
             res.status(500).send({ message: error.message });

@@ -23,7 +23,7 @@ function creaPagosRouter(params) {
             if (pagos) {
                 res.status(200).send(pagos);
             } else {
-                res.status(404).send(`Pagos with ID ${req.params.id} does not exist.`);
+                res.status(404).send(`El medio de pago no existe.`);
             }
         } catch (error) {
             res.status(500).send({ message: error.message });
@@ -37,7 +37,7 @@ function creaPagosRouter(params) {
             if (saved) {
                 res.status(201).send(saved);
             } else {
-                res.status(500).send('Could not save the payment.');
+                res.status(500).send('No se pudo guardar el medio de pago.');
             }
         } catch (error) {
             res.status(500).send({ message: error.message });
@@ -52,9 +52,9 @@ function creaPagosRouter(params) {
             });
             const updated = await pagos.update(req.body);
             if (updated) {
-                res.status(200).send('Pagos updated');
+                res.status(200).send('Medio de pago actualizado');
             } else {
-                res.status(404).send(`Pagos with ID ${req.params.id} does not exist.`);
+                res.status(404).send(`El medio de pago no existe.`);
             }
         } catch (error) {
             res.status(500).send({ message: error.message });
@@ -69,9 +69,9 @@ function creaPagosRouter(params) {
             });
             await pagos.destroy();
             if (pagos) {
-                res.status(200).send('Pagos deleted');
+                res.status(200).send('Medio de pago eliminado');
             } else {
-                res.status(404).send(`Pagos with ID ${req.params.id} does not exist.`);
+                res.status(404).send(`El medio de pago no existe.`);
             }
         } catch (error) {
             res.status(500).send({ message: error.message });

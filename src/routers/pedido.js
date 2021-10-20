@@ -36,7 +36,7 @@ function creaPedidosRouter(params) {
             if (Pedidos) {
                 res.status(200).send(Pedidos);
             } else {
-                res.status(404).send(`Pedidos with ID ${req.params.id} does not exist.`);
+                res.status(404).send(`El pedido no existe.`);
             }
         } catch (error) {
             res.status(500).send({ message: error.message });
@@ -64,7 +64,7 @@ function creaPedidosRouter(params) {
                 const prod = await Productos.findAll({ where: { id: producto.id } }, { transaction: transaccion });
                 if (!prod) {
 
-                    res.status(404).send(`Productos with ID ${producto.id} does not exist.`);
+                    res.status(404).send(`El pedido no existe.`);
 
                 } else { prods.push([prod, producto.cantidad]); }
             }
@@ -83,7 +83,7 @@ function creaPedidosRouter(params) {
             res.json(r);
         } catch (error) {
             await transaccion.rollback();
-            res.status(500).send('One of the productos does not exist. Please check the menu.');
+            res.status(500).send('El producto no existe. Revise el menú.');
         }
     });
     router.put('/pedidos/:id', verifyToken, verifyAdmin, async (req, res) => {
@@ -95,9 +95,9 @@ function creaPedidosRouter(params) {
             });
             const updated = await Pedidos.update(req.body);
             if (updated) {
-                res.status(200).send('Pedidos updated');
+                res.status(200).send('El pedido fue actualizado');
             } else {
-                res.status(404).send(`Pedidos with ID ${req.params.id} does not exist.`);
+                res.status(404).send(`El pedido no existe.`);
             }
         } catch (error) {
             res.status(500).send({ message: error.message });
@@ -112,9 +112,9 @@ function creaPedidosRouter(params) {
             });
             await Pedidos.destroy();
             if (Pedidos) {
-                res.status(200).send('Pedidos deleted');
+                res.status(200).send('El pedido fue eliminado');
             } else {
-                res.status(404).send(`Pedidos with ID ${req.params.id} does not exist.`);
+                res.status(404).send(`El pedido no existe.`);
             }
         } catch (error) {
             res.status(500).send({ message: error.message });

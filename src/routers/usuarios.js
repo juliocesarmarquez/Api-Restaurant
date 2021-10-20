@@ -44,14 +44,14 @@ function creaUsuariosRouter(params) {
             });
             if (mail === null) {
                 await data.save()
-                res.status(201).json('Now you can log in.');
+                res.status(201).json('Registro exitoso.');
             } else {
-                throw res.status(403).send('Use another email account');
+                throw res.status(403).send('Utilice otra cuenta de email');
             }
         } catch (error) {
             const msj = error.message
             console.log(msj);
-            res.status(417).send('You need to complete all the information.'+ msj);
+            res.status(417).send('Debe completar todos los campos'+ msj);
         }
     });
     router.post('/login/', async (req, res) => {
@@ -71,7 +71,7 @@ function creaUsuariosRouter(params) {
                         res.json({ token })
                     });
             } else {
-                throw new Error('Wrong information');
+                throw new Error('Error');
             }
         } catch (error) {
             res.status(500).send({ message: error.message });
@@ -86,9 +86,9 @@ function creaUsuariosRouter(params) {
             });
             const updated = await data.update(req.body);
             if (updated) {
-                res.status(200).send('Usuarios updated/suspended');
+                res.status(200).send('Perfil de usuario actualizado');
             } else {
-                res.status(404).send(`Usuarios with ID ${req.params.id} does not exist.`);
+                res.status(404).send(`El usuarios no existe.`);
             }
         } catch (error) {
             res.status(500).send({ message: error.message });

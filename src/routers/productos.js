@@ -24,7 +24,7 @@ function creaProductosRouter(params) {
             if (producto) {
                 res.status(200).json(producto);
             } else {
-                res.status(404).send(`Productos with ID ${req.params.id} does not exist.`);
+                res.status(404).send(`El producto no existe.`);
             }
         } catch (error) {
             res.status(500).send({ message: error.message });
@@ -43,7 +43,7 @@ function creaProductosRouter(params) {
                 });
                 res.status(201).json(saved);
             } else {
-                res.status(500).send('Could not save the product.');
+                res.status(500).send('No se pudo guardar el producto.');
             }
         } catch (error) {
             res.status(500).send({ message: error.message });
@@ -62,9 +62,9 @@ function creaProductosRouter(params) {
                     method: 'GET',
                     baseUrl: req.baseUrl,
                 });
-                res.status(200).send('Productos updated');
+                res.status(200).send('El producto fue actualizado');
             } else {
-                res.status(404).send(`Productos with ID ${req.params.id} does not exist.`);
+                res.status(404).send(`El producto no existe.`);
             }
         } catch (error) {
             res.status(500).send({ message: error.message });
@@ -81,9 +81,9 @@ function creaProductosRouter(params) {
                     method: 'GET',
                     baseUrl: req.baseUrl,
                 });
-                res.status(200).send('Productos deleted');
+                res.status(200).send('El producto fue eliminado');
             } else {
-                res.status(404).send(`Productos with ID ${req.params.id} does not exist.`);
+                res.status(404).send(`El producto no existe.`);
             }
         } catch (error) {
             res.status(500).send({ message: error.message });

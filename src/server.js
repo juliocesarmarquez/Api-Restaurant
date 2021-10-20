@@ -1,4 +1,5 @@
 const express = require('express');
+
 //routers importados
 const { creaUsuariosRouter } = require('./routers/usuarios');
 const { creaProductosRouter } = require('./routers/productos');

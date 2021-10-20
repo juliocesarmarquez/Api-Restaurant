@@ -13,13 +13,13 @@ function verifyToken(req, res, next) {
         req.token = bearertoken;
         jwt.verify(req.token, JWT_SECRET, async (error, authData) => {
             if(error){
-                return res.send('Invalid token');
+                return res.send('token invalido');
             }
             req.user=authData
             return next();
         })
     } else{
-        res.send('You need to add your token to the header with the word Bearer');
+        res.send('Error con token');
     }
 };
 function encript(secret) {
@@ -33,7 +33,7 @@ function verifyAdmin(req, res, next) {
            return next();
         }
         else {
-            res.status(404).send(`You are not an admin.`);
+            res.status(404).send(`No tiene permisos de Admin.`);
         }
     })
 };
@@ -45,7 +45,7 @@ function verifySuspend(req, res, next) {
            return next();
         }
         else {
-            res.status(404).send(`Sorry, you are suspended.`);
+            res.status(404).send(`No esta habilitado para continuar.`);
         }
     })
 };
