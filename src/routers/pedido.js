@@ -44,9 +44,9 @@ function creaPedidosRouter(params) {
     });
     router.post('/pedidos/', verifyToken, verifySuspend, async (req, res) => {
         const sequelize = getConnection();
-        const { direccion, productos } = req.body;
+        const { direccion, productosB } = req.body;
         const transaccion = await sequelize.transaction();
-        const usuariosId = req.usuarios.mail.id
+        const usuariosId = req.user.mail.id
         const pagos = Number(req.body.PagosId);
         const Pedidos = getModel('Pedidos');
         const Productos = getModel('Productos');
@@ -61,18 +61,18 @@ function creaPedidosRouter(params) {
         try {
             const prods = [];
             for (producto of productos) {
-                const prod = await Productos.findAll({ where: { id: producto.id } }, { transaction: transaccion });
+                const prod = await Productos.findAll({ where: { id: productosB.id } }, { transaction: transaccion });
                 if (!prod) {
 
                     res.status(404).send(`El pedido no existe.`);
 
-                } else { prods.push([prod, producto.cantidad]); }
+                } else { prods.push([prod, productosB.cantidad]); }
             }
             const pedidos = await Pedidos.create({ EstadosId: est.id, PagosId: pagar.id, UsuariosId: per.id, direccion }, { transaction: transaccion });
             for (Pedidos of prods) {
                 const [prod, cantidad] = Pedidos;
                 const total = prod[0].dataValues.precio * cantidad;
-                await ProductoPedido.create({ ProductId: prod[0].dataValues.id, PedidosId: pedidos.id, cantidad: cantidad, total: total }, { transaction: transaccion });
+                await ProductoPedido.create({ ProductosId: prod[0].dataValues.id, PedidosId: pedidos.id, cantidad: cantidad, total: total }, { transaction: transaccion });
             }
             await transaccion.commit();
             const r = await Pedidos.findOne({
