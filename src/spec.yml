@@ -566,9 +566,9 @@ components:
       properties:
         direccion:
           type: string
-        PagosId:
+        PagoId:
           type: integer
-        ProductosId:
+        products:
           type: array
           items: 
             properties:

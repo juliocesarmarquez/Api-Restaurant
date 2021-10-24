@@ -44,35 +44,36 @@ function creaPedidosRouter(params) {
     });
     router.post('/pedidos/', verifyToken, verifySuspend, async (req, res) => {
         const sequelize = getConnection();
-        const { direccion, productosB } = req.body;
+        const { direccion, products } = req.body;
         const transaccion = await sequelize.transaction();
         const usuariosId = req.user.mail.id
-        const pagos = Number(req.body.PagosId);
+        const pagos = Number(req.body.PagoId);
         const Pedidos = getModel('Pedidos');
         const Productos = getModel('Productos');
         const Pagos = getModel('Pagos');
         const Estados = getModel('Estados');
         const Usuarios = getModel('Usuarios');
-        const ProductoPedido = getModel('ProductoPedido');
+        const productopedido = getModel('ProductoPedidos');
         const est = await Estados.findOne({ where: { id: 1 } });
         const pagar = await Pagos.findOne({ where: { id: pagos } });
         const per = await Usuarios.findOne({ where: { id: usuariosId } });
 
         try {
             const prods = [];
-            for (producto of productos) {
-                const prod = await Productos.findAll({ where: { id: productosB.id } }, { transaction: transaccion });
+            for (producto of products) {
+                const prod = await Productos.findAll({ where: { id: producto.id } }, { transaction: transaccion });
                 if (!prod) {
 
-                    res.status(404).send(`El pedido no existe.`);
+                    res.status(404).send(`El producto no existe.`);
 
-                } else { prods.push([prod, productosB.cantidad]); }
+                } else { prods.push([prod, producto.cantidad]); }
             }
-            const pedidos = await Pedidos.create({ EstadosId: est.id, PagosId: pagar.id, UsuariosId: per.id, direccion }, { transaction: transaccion });
-            for (Pedidos of prods) {
-                const [prod, cantidad] = Pedidos;
+            const pedidos = await Pedidos.create({ EstadoId: est.id, PagoId: pagar.id, UsuarioId: per.id, direccion }, { transaction: transaccion });
+            for (data of prods) {
+                const [prod, cantidad] = data;
                 const total = prod[0].dataValues.precio * cantidad;
-                await ProductoPedido.create({ ProductosId: prod[0].dataValues.id, PedidosId: pedidos.id, cantidad: cantidad, total: total }, { transaction: transaccion });
+                console.log(total)
+                await productopedido.create({ ProductoId: prod[0].dataValues.id, PedidoId: pedidos.id, cantidad: cantidad, total: total }, { transaction: transaccion });
             }
             await transaccion.commit();
             const r = await Pedidos.findOne({
@@ -82,18 +83,19 @@ function creaPedidosRouter(params) {
             });
             res.json(r);
         } catch (error) {
+            console.log(error)
             await transaccion.rollback();
             res.status(500).send('El producto no existe. Revise el menú.');
         }
     });
     router.put('/pedidos/:id', verifyToken, verifyAdmin, async (req, res) => {
         try {
-            const Pedidos = await getModel('Pedidos').findOne({
+            const data = await getModel('Pedidos').findOne({
                 where: {
                     id: req.params.id
                 }
             });
-            const updated = await Pedidos.update(req.body);
+            const updated = await data.update(req.body);
             if (updated) {
                 res.status(200).send('El pedido fue actualizado');
             } else {
@@ -105,13 +107,13 @@ function creaPedidosRouter(params) {
     });
     router.delete('/pedidos/:id', verifyToken, verifyAdmin, async (req, res) => {
         try {
-            const Pedidos = await getModel('Pedidos').findOne({
+            const data = await getModel('Pedidos').findOne({
                 where: {
                     id: req.params.id
                 }
             });
-            await Pedidos.destroy();
-            if (Pedidos) {
+            await data.destroy();
+            if (data) {
                 res.status(200).send('El pedido fue eliminado');
             } else {
                 res.status(404).send(`El pedido no existe.`);
@@ -131,7 +133,7 @@ function creaPedidosRouter(params) {
                     const Pagos = getModel('Pagos');
                     const Estados = getModel('Estados');
                     const Pedidos = await getModel('Pedidos').findAll({
-                        where: { UsuariosId: authData.mail.id },
+                        where: { UsuarioId: authData.mail.id },
                         include: [Productos, Pagos, Estados]
                     });
                     res.status(200).send(Pedidos);

@@ -6,19 +6,14 @@ function creaProductoPedidoModel(connection, Productos, Pedidos) {
         ProductoId: {
             type: DataTypes.INTEGER,
             references: {
-
                 model: Productos,
-
                 key: 'id'
             }
         },
         PedidoId: {
             type: DataTypes.INTEGER,
             references: {
-                
                 model: Pedidos,
-
-                // This is the column name of the referenced model
                 key: 'id'
             }
         },

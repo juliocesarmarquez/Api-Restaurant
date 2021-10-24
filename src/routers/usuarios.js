@@ -78,17 +78,18 @@ function creaUsuariosRouter(params) {
         }
     });
     
-    ///To suspend clients
+    ///Suspende usuarios
     router.put('/usuarios/:id', verifyToken, verifyAdmin, async (req, res) => {
         try {
             const data = await getModel('Usuarios').findOne({
                 where: { id: req.params.id }
             });
             const updated = await data.update(req.body);
+            console.log(updated)
             if (updated) {
                 res.status(200).send('Perfil de usuario actualizado');
             } else {
-                res.status(404).send(`El usuarios no existe.`);
+                res.status(404).send(`El usuario no existe.`);
             }
         } catch (error) {
             res.status(500).send({ message: error.message });
