@@ -577,7 +577,7 @@ components:
                 description: producto id
               cantidad:
                 type: integer
-                description: numero de producto
+                description: cantidad de producto
             example: 
               id: 1
               cantidad: 3

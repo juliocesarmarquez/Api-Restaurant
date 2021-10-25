@@ -18,15 +18,6 @@ En el marco del Sprint Project 2 del Curso de Desarrollo Web Backend de ACAMICA 
 * Mariadb / Sequelize
 * Redis
 
-#### Actualizar las variables de entorno
- - Agregar las variables de entorno locales en el archivo .env.example:   
-    * PORT: Puerto utilizado para iniciar servidor.
-    * DB_USERNAME: Nombre de usuario de base de datos.
-    * DB_PASSWORD: Contraseña de base de datos.
-    * DB_NAME: Nombre de la base de datos.
-    * DB_PORT: Puerto donde funciona la base de datos
-    * DB_HOST: Nombre del host de la base de datos (localhost)
-    * JWT_SECRET: Clave para encriptar datos de JWT
 
 #### Instrucciones de instalación:
 
@@ -35,11 +26,18 @@ En el marco del Sprint Project 2 del Curso de Desarrollo Web Backend de ACAMICA 
     `git clone https://github.com/juliocesarmarquez/dwbe-sprint1-MyApp.git`
 3. Ingresar a la carpeta dwbe-sprint1-MyApp 
 4. Ejecutar `npm install`
-5. Iniciar el servidor ejecutando `npm run start`
-
-#### Testing
-
-* Ejecutar el comando `npm test` 
+5. #### Configurar las variables de entorno
+ - Agregar las variables de entorno locales en el archivo .env.example y cambiar su nombre por .env:   
+    * PORT: Puerto utilizado para iniciar servidor.
+    * DB_USERNAME: Nombre de usuario de base de datos.
+    * DB_PASSWORD: Contraseña de base de datos.
+    * DB_NAME: Nombre de la base de datos.
+    * DB_PORT: Puerto donde funciona la base de datos
+    * DB_HOST: Nombre del host de la base de datos (localhost)
+    * JWT_SECRET: Clave para encriptar datos de JWT
+6. (Opcional) Ejecutar script sql ubicado en la carpeta sql que contiene la base de datos.
+7. Iniciar el servidor ejecutando `npm run start`
+8. Ejecutar el test con el comando `npm test` 
 
 #### Documentación con SWAGGER:
 * Ingresar a la URL http://localhost:3000/api-docs/
