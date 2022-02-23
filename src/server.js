@@ -1,6 +1,7 @@
 const express = require('express');
 
 //routers importados
+const { auth0 } = require('./routers/auth');
 const { creaUsuariosRouter } = require('./routers/usuarios');
 const { creaProductosRouter } = require('./routers/productos');
 const { creaPagosRouter } = require('./routers/pagos');
@@ -33,6 +34,7 @@ function makeServer() {
     server.use('/api', creaPedidosRouter());
     server.use('/api', creaEstadosRouter());
     server.use('/api/testusuario', makeUsersRouter());
+    server.use('/api/', auth0());
     loadSwaggerinfo(server);
     return server;
 }
