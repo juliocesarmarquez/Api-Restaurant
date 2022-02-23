@@ -2,7 +2,7 @@
 
 #### Detalle
 
-En el marco del Sprint Project 2 del Curso de Desarrollo Web Backend de ACAMICA se trabajo con la API realizada en el Sprint 1 incorporando la persistencia de datos.
+En el marco del Sprint Project 3 del Curso de Desarrollo Web Backend de ACAMICA se trabajo con la API realizada en el Sprint 2 logrando desplegarla a través de la nube de AWS.
 
 #### Tecnologias utilizadas:
 
@@ -18,15 +18,19 @@ En el marco del Sprint Project 2 del Curso de Desarrollo Web Backend de ACAMICA 
 * Mariadb / Sequelize
 * Redis
 
-#### Actualizar las variables de entorno
- - Agregar las variables de entorno locales en el archivo .env.example:   
-    * PORT: Puerto utilizado para iniciar servidor.
-    * DB_USERNAME: Nombre de usuario de base de datos.
-    * DB_PASSWORD: Contraseña de base de datos.
-    * DB_NAME: Nombre de la base de datos.
-    * DB_PORT: Puerto donde funciona la base de datos
-    * DB_HOST: Nombre del host de la base de datos (localhost)
-    * JWT_SECRET: Clave para encriptar datos de JWT
+#### Servicios y software utilizados en Amazon Web Services
+
+* EC2
+* RDS
+* Load Balancer
+* Auto Scaling
+* ElastiCache
+* S3
+* Route53
+* CI
+* CloudFront
+* NGINX
+* PM2
 
 #### Instrucciones de instalación:
 
@@ -37,12 +41,28 @@ En el marco del Sprint Project 2 del Curso de Desarrollo Web Backend de ACAMICA 
 4. Ejecutar `npm install`
 5. Iniciar el servidor ejecutando `npm run start`
 
-#### Testing
+#### Ingreso a la consola de AWS:
+1. En la carpeta .ZIP se encuentran las credenciales del usuario para el tech reviewer.
+2. Iniciar la instancia:
+* Conectar la instancia
+* Se debe copiar/pegar el comando de ssh para conectarse desde una consola, se deberá utilizar el archivo instance1key.pem para poder acceder.
+* En la consola con modo root "#" debe inicializar NGINX con el comando nginx
+* Debe salir del modo root 
+ ctrl + D
+* En el modo User "$" debe dar inicio a la aplicación dirigiendose a la carpeta /App
+ cd App/
+* Una vez en la carpeta debe iniciar PM2
+ pm2 start ecosystem.config.js --env dev
+* Luego de esto podrá comprobar funcionamiento en el dominio https://www.juliomarquez.com.ar/ 
+* Tambien podrá probar el endpoint https://www.juliomarquez.com.ar/api/productos o testearlo a través de Postman.
 
-* Ejecutar el comando `npm test` 
+#### Continuous Integration
+* La integracion continua del proyecto se realiza a través del bucket de S3 cuyo nombre es 'juliobucket'.
+
+* Repositorio: https://gitlab.com/
 
 #### Documentación con SWAGGER:
-* Ingresar a la URL http://localhost:3000/api-docs/
+* Ingresar a la URL http://localhost:3000/api-docs/ o abrir el archivo spec.yml y copiar el contenido en https://editor.swagger.io/
 
 ---
 *Autor: Julio Cesar Márquez*
