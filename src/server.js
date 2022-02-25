@@ -1,7 +1,10 @@
 const express = require('express');
+const passport = require('passport');
+const session = require('express-session');
+
 
 //routers importados
-const { auth0 } = require('./routers/auth');
+const { router } = require('./routers/auth');
 const { creaUsuariosRouter } = require('./routers/usuarios');
 const { creaProductosRouter } = require('./routers/productos');
 const { creaPagosRouter } = require('./routers/pagos');
@@ -27,6 +30,9 @@ function makeServer() {
     const server = express();
     server.use(express.json());
     server.use(express.urlencoded({ extended: false }));
+    server.use(session({secret:'pass'}))
+    server.use(passport.initialize())
+    server.use(passport.session())
     server.use(helmet());
     server.use('/api', creaProductosRouter());
     server.use('/api', creaUsuariosRouter());
@@ -34,7 +40,7 @@ function makeServer() {
     server.use('/api', creaPedidosRouter());
     server.use('/api', creaEstadosRouter());
     server.use('/api/testusuario', makeUsersRouter());
-    server.use('/api/', auth0());
+    server.use('/api', router);
     loadSwaggerinfo(server);
     return server;
 }
