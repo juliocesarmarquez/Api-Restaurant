@@ -20,6 +20,7 @@ function cache(req, res, next) {
         if (error || !data) {
             next();
         } else {
+            console.log('Usando redis cache')
             res.send(JSON.parse(data));
         }
     });

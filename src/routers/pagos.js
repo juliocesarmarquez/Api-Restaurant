@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { getModel } = require('../database');
 const { verifyToken, verifyAdmin, verifySuspend } = require('../middlewares/middlewares');
+const axios = require('axios');
 
 function creaPagosRouter(params) {
     const router = new Router();
@@ -77,6 +78,59 @@ function creaPagosRouter(params) {
             res.status(500).send({ message: error.message });
         }
     });
+    router.post('/pagar/', verifyToken, async (req, res) => {
+        try {
+            const order = req.body.PedidoId
+            const data = await getModel('ProductoPedidos').findOne({
+                where: { PedidoId: order }
+            });
+            console.log(data.total)
+            const pedido = {
+                "intent": "CAPTURE",
+                "purchase_units": [
+                    {
+                        "amount": {
+                            "currency_code": "USD",
+                            "value": data.total
+                        }
+                    }
+                ],
+                "application_context": {
+                    "brand_name": "Luisina",
+                    "landing_page": "LOGIN",
+                    "user_action": "PAY_NOW",
+                    "return_url": "http://localhost:3000/api/confirmapago/",
+                    "cancel_url": "http://localhost:3000/api/historial/"
+                },
+            }
+            const response = await axios.post(`${process.env.PAYPAL_API}/v2/checkout/orders`, pedido, {
+                "auth": {
+                    "username": process.env.PAYPAL_CLIENTID,
+                    "password": process.env.PAYPAL_SECRET
+                }
+            });
+            //console.log(response.data)
+            res.status(200).send(response.data);
+        } catch (error) {
+            res.status(500).send({ message: error.message });
+        }
+    });
+    router.get('/confirmapago/', /*verifyToken,*/ async (req, res) => {
+        try {
+            const { token } = req.query
+            const response = await axios.post(`${process.env.PAYPAL_API}/v2/checkout/orders/${token}/capture`, {}, {
+                "auth": {
+                    "username": process.env.PAYPAL_CLIENTID,
+                    "password": process.env.PAYPAL_SECRET
+                }
+            });
+
+            console.log(response.data)
+            res.status(200).send('Pago realizado con éxito!');
+        } catch (error) {
+            res.status(500).send({ message: error.message });
+        }
+    })
     return router;
 }
 

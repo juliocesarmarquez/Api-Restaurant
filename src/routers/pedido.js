@@ -4,6 +4,8 @@ const { verifyToken, verifyAdmin, verifySuspend } = require('../middlewares/midd
 const jwt = require('jsonwebtoken');
 const { getConnection } = require('../database/index');
 
+
+
 function creaPedidosRouter(params) {
     const router = new Router();
 
@@ -143,8 +145,12 @@ function creaPedidosRouter(params) {
             res.status(500).send({ message: error.message });
         }
     });
+    
     return router;
 }
+
+
+
 
 module.exports = {
     creaPedidosRouter
