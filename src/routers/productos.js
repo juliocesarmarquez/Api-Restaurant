@@ -6,7 +6,7 @@ const { cache, storeObjectInCache, invalidateCache } = require('../middlewares/c
 function creaProductosRouter(params) {
     const router = new Router();
 
-    router.get('/productos/', verifyToken, verifySuspend, cache, async (req, res) => {
+    router.get('/productos/', cache, async (req, res) => {
         try {
             const producto = await getModel('Productos').findAll();
             storeObjectInCache(req, producto);
