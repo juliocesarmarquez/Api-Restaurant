@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  mi-app-db:
+    image: mariadb
+    ports:
+      - 3306:3306
+    environment:
+      - DB_USERNAME = "admin" 
+      - DB_PASSWORD = "password" 
+      - DB_NAME = "test"
+    volumes:
+      - ~/Proyectos/Propios/prueba-ci-cd-2/:/var/lib/mysql
+    networks:
+      - mi-app-network
+
+  mi-app-server:
+    depends_on:
+      - mi-app-db
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      - DB_HOST=mi-app-db
+    networks:
+      - mi-app-network
+
+networks:
+  mi-app-network:
+    driver: bridge
