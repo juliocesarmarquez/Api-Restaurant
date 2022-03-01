@@ -49,10 +49,8 @@ En el marco del Sprint Project 3 del Curso de Desarrollo Web Backend de ACAMICA 
 3. En la consola con modo root "#" debe inicializar NGINX con el comando nginx
 4. Debe salir del modo root 
  ctrl + D
-5. En el modo User "$" debe dar inicio a la aplicación dirigiendose a la carpeta /App
- `cd App/`
-6. Una vez en la carpeta debe iniciar PM2
- pm2 start ecosystem.config.js --env dev
+5. En el modo User "$" debe dar inicio a la aplicación con PM2
+ `pm2 start App/ecosystem.config.js --env dev`
 7. Luego de esto podrá comprobar funcionamiento en el dominio https://www.juliomarquez.com.ar/ 
 8. Tambien podrá probar el endpoint https://www.juliomarquez.com.ar/api/productos o testearlo a través de Postman.
 
