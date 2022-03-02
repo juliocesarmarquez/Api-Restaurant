@@ -96,7 +96,7 @@ function creaPagosRouter(params) {
                     }
                 ],
                 "application_context": {
-                    "brand_name": "Luisina",
+                    "brand_name": "Home",
                     "landing_page": "LOGIN",
                     "user_action": "PAY_NOW",
                     "return_url": "http://localhost:3000/api/confirmapago/",

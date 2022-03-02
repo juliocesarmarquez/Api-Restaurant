@@ -54,6 +54,23 @@ function creaUsuariosRouter(params) {
             res.status(417).send('Debe completar todos los campos'+ msj);
         }
     });
+    const isAuthenticated = (req, res, next) => {
+        if (req.isAuthenticated()){
+            return next();
+        }
+        res.status(401).json('El usuario no esta autenticado')
+    } 
+    router.get('/token', isAuthenticated,(req, res) =>{
+        const user = req.user;
+        const { JWT_SECRET } = process.env;
+        jwt.sign({
+            mail: user.email
+        }
+            , JWT_SECRET, (err, token) => {
+                res.json({ token })
+            });
+
+    } );
     router.post('/login/', async (req, res) => {
         try {
             const { JWT_SECRET } = process.env;

@@ -32,7 +32,7 @@ router.get('/login/auth0', passport.authenticate('auth0',{
 }));
 router.get('/auth0/callback', passport.authenticate('auth0', {
     failureRedirect: '/error',
-    successRedirect: '/api/productos'
+    successRedirect: '/api/token'
 }));
 router.get('/logout', (req,res)=> {
     req.logOut()
