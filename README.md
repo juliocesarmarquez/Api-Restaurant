@@ -9,7 +9,6 @@ En el marco del Sprint Project 3 del Curso de Desarrollo Web Backend de ACAMICA 
 * Git
 * NodeJS
 * Express
-* Moment
 * JWT (Json Web Token)
 * Crypto
 * Helmet
@@ -59,8 +58,6 @@ En el marco del Sprint Project 3 del Curso de Desarrollo Web Backend de ACAMICA 
 
 * Repositorio: https://gitlab.com/JulioCesarMarquez/cicdaws
 
-#### Documentación con SWAGGER:
-* Ingresar a la URL http://localhost:3000/api-docs/ o abrir el archivo spec.yml y copiar el contenido en https://editor.swagger.io/
 
 ---
 *Autor: Julio Cesar Márquez*
