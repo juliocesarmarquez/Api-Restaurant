@@ -44,11 +44,11 @@ function creaPedidosRouter(params) {
             res.status(500).send({ message: error.message });
         }
     });
-    router.post('/pedidos/', verifyToken, verifySuspend, async (req, res) => {
+    router.post('/pedidos/', verifyToken, /* verifySuspend, */ async (req, res) => {
         const sequelize = getConnection();
         const { direccion, products } = req.body;
         const transaccion = await sequelize.transaction();
-        const usuariosId = req.user.mail.id
+        const usuariosId = req.user.idP.id
         const pagos = Number(req.body.PagoId);
         const Pedidos = getModel('Pedidos');
         const Productos = getModel('Productos');
@@ -135,7 +135,7 @@ function creaPedidosRouter(params) {
                     const Pagos = getModel('Pagos');
                     const Estados = getModel('Estados');
                     const Pedidos = await getModel('Pedidos').findAll({
-                        where: { UsuarioId: authData.mail.id },
+                        where: { UsuarioId: authData.idP.id },
                         include: [Productos, Pagos, Estados]
                     });
                     res.status(200).send(Pedidos);

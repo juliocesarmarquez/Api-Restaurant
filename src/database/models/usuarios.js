@@ -18,7 +18,6 @@ function creaUsuariosModel(connection) {
         email: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true,
             validate:{
                 isEmail: true,
             }
@@ -53,6 +52,10 @@ function creaUsuariosModel(connection) {
             type: DataTypes.BOOLEAN,
             allowNull: true,
             defaultValue: false
+        },
+        idProvider: {
+            type: DataTypes.STRING,
+            allowNull: true
         }
     },{
         timestamps: false

@@ -2,6 +2,7 @@ const passport = require('passport')
 const auth0Strategy = require('passport-auth0').Strategy
 const express = require('express')
 const router = express.Router()
+const { buscaUsuario } = require('../config/db');
 
 passport.serializeUser(function (user, done) {
     done(null, user);
@@ -20,11 +21,15 @@ passport.use(new auth0Strategy({
 }, (accessToken, refreshToken, extraParams, profile, done) => {
     if (profile) {
         console.log(profile);
+        profile1 = profile;
         return done(null, profile);
     } else {
         return done(new Error('No existe usuario'));
     }
 }));
+function gProfile(){
+    return profile1;
+}
 
 router.get('/login/auth0', passport.authenticate('auth0',{
     prompt: 'login', 
@@ -39,4 +44,4 @@ router.get('/logout', (req,res)=> {
     res.json('sesion finalizada')
 });
 
-module.exports = { router }
+module.exports = { router, gProfile }

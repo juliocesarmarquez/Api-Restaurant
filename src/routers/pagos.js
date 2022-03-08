@@ -89,6 +89,7 @@ function creaPagosRouter(params) {
                 "intent": "CAPTURE",
                 "purchase_units": [
                     {
+                        "reference_id":data.PedidoId,
                         "amount": {
                             "currency_code": "USD",
                             "value": data.total
@@ -115,7 +116,7 @@ function creaPagosRouter(params) {
             res.status(500).send({ message: error.message });
         }
     });
-    router.get('/confirmapago/', /*verifyToken,*/ async (req, res) => {
+    router.get('/confirmapago/', /* verifyToken */ async (req, res) => {
         try {
             const { token } = req.query
             const response = await axios.post(`${process.env.PAYPAL_API}/v2/checkout/orders/${token}/capture`, {}, {
@@ -124,10 +125,16 @@ function creaPagosRouter(params) {
                     "password": process.env.PAYPAL_SECRET
                 }
             });
-
-            console.log(response.data)
-            res.status(200).send('Pago realizado con éxito!');
-        } catch (error) {
+        if (response.data.status === 'COMPLETED') {
+            const status1 = await getModel('Pedidos').findOne({
+                where: {id: response.data.purchase_units[0].reference_id}
+                });
+                const estado = status1.update({EstadoId: 2})
+                res.status(200).send('Su pago fue realizado con Éxito!');
+                return estado
+            }
+        }
+        catch (error) {
             res.status(500).send({ message: error.message });
         }
     })

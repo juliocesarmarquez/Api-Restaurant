@@ -29,7 +29,7 @@ function encript(secret) {
 function verifyAdmin(req, res, next) {
     const { JWT_SECRET } = process.env
     jwt.verify(req.token, JWT_SECRET, async (error, authData) => {
-        if (authData.mail.admin === true) {
+        if (authData.idP.admin === true) {
            return next();
         }
         else {
@@ -41,7 +41,7 @@ function verifyAdmin(req, res, next) {
 function verifySuspend(req, res, next) {
     const { JWT_SECRET } = process.env
     jwt.verify(req.token, JWT_SECRET, async (error, authData) => {
-        if (authData.mail.suspendido === false) {
+        if (authData.idP.suspendido === false) {
            return next();
         }
         else {

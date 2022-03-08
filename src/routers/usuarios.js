@@ -2,6 +2,8 @@ const { Router } = require('express');
 const { getModel } = require('../database');
 const jwt = require('jsonwebtoken');
 const { encript, verifyToken, verifyAdmin } = require('../middlewares/middlewares');
+const { gProfile } = require('../routers/auth');
+const { buscaUsuario } = require('../config/db')
 
 
 function creaUsuariosRouter(params) {
@@ -51,26 +53,36 @@ function creaUsuariosRouter(params) {
         } catch (error) {
             const msj = error.message
             console.log(msj);
-            res.status(417).send('Debe completar todos los campos'+ msj);
+            res.status(417).send('Debe completar todos los campos' + msj);
         }
     });
     const isAuthenticated = (req, res, next) => {
-        if (req.isAuthenticated()){
+        if (req.isAuthenticated()) {
             return next();
         }
         res.status(401).json('El usuario no esta autenticado')
-    } 
-    router.get('/token', isAuthenticated,(req, res) =>{
-        const user = req.user;
-        const { JWT_SECRET } = process.env;
-        jwt.sign({
-            mail: user.email
-        }
-            , JWT_SECRET, (err, token) => {
-                res.json({ token })
+    }
+    router.get('/token', isAuthenticated,  async (req, res) => {
+        try {
+            const profile = gProfile();
+            await buscaUsuario(profile)
+            const idP = await getModel('Usuarios').findOne({
+                where: { idProvider: profile.id }
             });
+            console.log(idP)
+            const { JWT_SECRET } = process.env;
+            if (idP !== null) {
+                jwt.sign({ idP }, JWT_SECRET, (_err, token) => { res.json({ token }) });
+            } else {
+                throw new Error('Falla info');
+            }
+        } catch (error) {
+            res.status(500).send({ message: error.message });
+        }
+    });
 
-    } );
+
+
     router.post('/login/', async (req, res) => {
         try {
             const { JWT_SECRET } = process.env;
@@ -94,7 +106,7 @@ function creaUsuariosRouter(params) {
             res.status(500).send({ message: error.message });
         }
     });
-    
+
     ///Suspende usuarios
     router.put('/usuarios/:id', verifyToken, verifyAdmin, async (req, res) => {
         try {

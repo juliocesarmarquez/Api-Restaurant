@@ -45,7 +45,47 @@ async function initialize() {
             detalle: 'Creado'
         })
     }
+    const current4 = await Estados.findOne({
+        detalle: 'Pagado'
+    })
+    if (!current4) {
+        Estados.create({
+            detalle: 'Pagado'
+        })
+    }
 };
+async function buscaUsuario(profile) {
+    try {
+        const userExist = getModel('Usuarios')
+        const newUser = new userExist({
+            nombreUsuario: profile.nickname,
+            apellido: profile._json.family_name || profile._json.name,
+            email: 'unknown@unknown.com',
+            direccion: 'unknown',
+            telefono: 0000,
+            contrasena: encript('unknown'),
+            admin: false,
+            suspendido: false,
+            idProvider: profile.id
+        })
+        const user = await userExist.findOne({
+            where:
+                { idProvider: profile.id }
+        });
+        console.log(user)
+        if (user === null) {
+            await newUser.save()
+
+        } else {
+            console.log('registrado en Base de Datos')
+        }
+
+    } catch (error) {
+        console.log({ message: error.message });
+    }
+}
+
+
 module.exports = {
-    initialize
+    initialize, buscaUsuario
 };

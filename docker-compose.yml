@@ -1,22 +1,35 @@
-version: "3.9"
+version: '3.3'
 
 services:
   mi-app-db:
     image: mariadb
     ports:
-      - 3306:3306
+      - 3307:3306
     environment:
-      - DB_USERNAME = "admin" 
-      - DB_PASSWORD = "password" 
-      - DB_NAME = "test"
+      - MARIADB_ROOT_PASSWORD="32039315"
+      - DB_USERNAME="admin" 
+      - DB_PASSWORD="password" 
+      - DB_NAME="test"
     volumes:
-      - ~/Proyectos/Propios/prueba-ci-cd-2/:/var/lib/mysql
+      - ~/Documentos/sprint4/:/var/lib/mysql
     networks:
       - mi-app-network
-
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6389:6379'
+    environment:
+      - REDIS_HOST=cache
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=passwordredis
+    command: redis-server --save 20 1 --loglevel warning --requirepass passwordredis
+    volumes: 
+      - ./redis-data:/data
   mi-app-server:
     depends_on:
       - mi-app-db
+      - cache
     build: .
     ports:
       - 3000:3000
