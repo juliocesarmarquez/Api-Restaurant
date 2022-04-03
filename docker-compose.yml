@@ -1,43 +1,40 @@
 version: '3.3'
 
 services:
-  mi-app-db:
+  mariadb:
+    env_file: ./.env.docker
     image: mariadb
+    container_name: mariadb
     ports:
-      - 3307:3306
+      - "3306:3306"
     environment:
-      - MARIADB_ROOT_PASSWORD="32039315"
-      - DB_USERNAME="admin" 
-      - DB_PASSWORD="password" 
-      - DB_NAME="test"
+      MARIADB_DATABASE: ${DB_NAME}
+      MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
     volumes:
       - ~/Documentos/sprint4/:/var/lib/mysql
     networks:
-      - mi-app-network
-  cache:
-    image: redis:6.2-alpine
-    restart: always
+      - my-app-network 
+  redis:
+    image: redis:alpine
+    container_name: redis
     ports:
-      - '6389:6379'
-    environment:
-      - REDIS_HOST=cache
-      - REDIS_PORT=6379
-      - REDIS_PASSWORD=passwordredis
-    command: redis-server --save 20 1 --loglevel warning --requirepass passwordredis
+      - "6379:6379"
+    env_file: ./.env.docker
     volumes: 
       - ./redis-data:/data
+    networks:
+      - my-app-network
   mi-app-server:
     depends_on:
-      - mi-app-db
-      - cache
+      - mariadb
+      - redis
     build: .
     ports:
-      - 3000:3000
-    environment:
-      - DB_HOST=mi-app-db
+      - "3000:3000"
+    env_file: ./.env.docker
     networks:
-      - mi-app-network
+      - my-app-network
 
 networks:
-  mi-app-network:
+  my-app-network:
     driver: bridge
