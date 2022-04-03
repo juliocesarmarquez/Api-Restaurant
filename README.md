@@ -35,6 +35,9 @@ En el marco del Sprint Project 4 del Curso de Desarrollo Web Backend de ACAMICA 
     * DB_PORT: Puerto donde funciona la base de datos
     * DB_HOST: Nombre del host de la base de datos (localhost)
     * JWT_SECRET: Clave para encriptar datos de JWT
+    * PAYPAL_SECRET= variables entorno Paypal
+    * PAYPAL_API= variables entorno Paypal
+    * PAYPAL_CLIENTID= variables entorno Paypal
 
  - Crear variables de entorno en el archivo .env.docker.example y cambiar su nombre por env.docker para luego levantar el contenedor con el comando `docker-compose up`
 6. (Opcional) Ejecutar script sql ubicado en la carpeta sql que contiene la base de datos.
